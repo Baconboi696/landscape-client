@@ -15,7 +15,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Accept both images and videos as file fields
 const upload = multer();
+
+// Helper: upload a buffer to Cloudinary
+const uploadToCloudinary = (fileBuffer, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(options, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+    streamifier.createReadStream(fileBuffer).pipe(uploadStream);
+  });
+};
 
 // POST /api/admin/login
 router.post('/login', async (req, res) => {
@@ -42,7 +54,6 @@ router.get('/analytics', auth, async (req, res) => {
     const totalInquiries = await Inquiry.countDocuments();
     const pendingInquiries = await Inquiry.countDocuments({ responded: false });
 
-    // Simple monthly aggregation for properties
     const properties = await Property.find({}, 'createdAt category');
     const monthlyGroups = {};
     const typeGroups = {};
@@ -50,7 +61,6 @@ router.get('/analytics', auth, async (req, res) => {
     properties.forEach(p => {
       const month = p.createdAt.toLocaleString('default', { month: 'short' });
       monthlyGroups[month] = (monthlyGroups[month] || 0) + 1;
-
       const type = p.category || 'Other';
       typeGroups[type] = (typeGroups[type] || 0) + 1;
     });
@@ -58,13 +68,7 @@ router.get('/analytics', auth, async (req, res) => {
     const monthlyData = Object.entries(monthlyGroups).map(([month, count]) => ({ month, count }));
     const typeData = Object.entries(typeGroups).map(([name, value]) => ({ name, value }));
 
-    res.json({
-      totalProperties,
-      totalInquiries,
-      pendingInquiries,
-      monthly: monthlyData,
-      types: typeData,
-    });
+    res.json({ totalProperties, totalInquiries, pendingInquiries, monthly: monthlyData, types: typeData });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch analytics' });
   }
@@ -72,42 +76,100 @@ router.get('/analytics', auth, async (req, res) => {
 
 // GET /api/admin/properties (protected)
 router.get('/properties', auth, async (req, res) => {
-  const properties = await Property.find();
+  const properties = await Property.find().sort({ createdAt: -1 });
   res.json(properties);
 });
 
-// POST /api/admin/properties (protected)
-router.post('/properties', auth, upload.array('images'), async (req, res) => {
+// POST /api/admin/properties (protected) — handles images + videos
+router.post('/properties', auth, upload.fields([{ name: 'images' }, { name: 'videos' }]), async (req, res) => {
   try {
     let imageUrls = [];
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const result = await new Promise((resolve, reject) => {
-          const uploadStream = cloudinary.uploader.upload_stream({ folder: 'properties' }, (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
-          });
-          streamifier.createReadStream(file.buffer).pipe(uploadStream);
-        });
+    let videoUrls = [];
+
+    if (req.files?.images?.length > 0) {
+      for (const file of req.files.images) {
+        const result = await uploadToCloudinary(file.buffer, { folder: 'properties/images', resource_type: 'image' });
         imageUrls.push(result.secure_url);
       }
     }
+
+    if (req.files?.videos?.length > 0) {
+      for (const file of req.files.videos) {
+        const result = await uploadToCloudinary(file.buffer, { folder: 'properties/videos', resource_type: 'video' });
+        videoUrls.push(result.secure_url);
+      }
+    }
+
+    const { name, description, city, state, lat, lng, type, category, amenities } = req.body;
+
     const property = new Property({
-      ...req.body,
+      name,
+      description,
+      city,
+      state,
+      coordinates: lat && lng ? { lat: parseFloat(lat), lng: parseFloat(lng) } : undefined,
+      type,
+      category,
+      amenities: amenities ? amenities.split(',').map(a => a.trim()).filter(Boolean) : [],
       images: imageUrls,
-      amenities: req.body.amenities ? req.body.amenities.split(',').map(a => a.trim()) : [],
+      videos: videoUrls,
     });
+
     await property.save();
     res.json(property);
   } catch (err) {
+    console.error('Add property error:', err);
     res.status(400).json({ error: 'Failed to add property', details: err.message });
   }
 });
 
 // PUT /api/admin/properties/:id (protected)
-router.put('/properties/:id', auth, async (req, res) => {
-  const property = await Property.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(property);
+router.put('/properties/:id', auth, upload.fields([{ name: 'images' }, { name: 'videos' }]), async (req, res) => {
+  try {
+    const existing = await Property.findById(req.params.id);
+    if (!existing) return res.status(404).json({ error: 'Property not found' });
+
+    let imageUrls = existing.images || [];
+    let videoUrls = existing.videos || [];
+
+    if (req.files?.images?.length > 0) {
+      for (const file of req.files.images) {
+        const result = await uploadToCloudinary(file.buffer, { folder: 'properties/images', resource_type: 'image' });
+        imageUrls.push(result.secure_url);
+      }
+    }
+
+    if (req.files?.videos?.length > 0) {
+      for (const file of req.files.videos) {
+        const result = await uploadToCloudinary(file.buffer, { folder: 'properties/videos', resource_type: 'video' });
+        videoUrls.push(result.secure_url);
+      }
+    }
+
+    const { name, description, city, state, lat, lng, type, category, amenities } = req.body;
+
+    const updated = await Property.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...(name && { name }),
+        ...(description && { description }),
+        ...(city && { city }),
+        ...(state && { state }),
+        ...(lat && lng && { coordinates: { lat: parseFloat(lat), lng: parseFloat(lng) } }),
+        ...(type && { type }),
+        ...(category && { category }),
+        ...(amenities && { amenities: amenities.split(',').map(a => a.trim()).filter(Boolean) }),
+        images: imageUrls,
+        videos: videoUrls,
+      },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error('Update property error:', err);
+    res.status(400).json({ error: 'Failed to update property', details: err.message });
+  }
 });
 
 // DELETE /api/admin/properties/:id (protected)
@@ -118,7 +180,7 @@ router.delete('/properties/:id', auth, async (req, res) => {
 
 // GET /api/admin/inquiries (protected)
 router.get('/inquiries', auth, async (req, res) => {
-  const inquiries = await Inquiry.find().populate('property');
+  const inquiries = await Inquiry.find().populate('property').sort({ createdAt: -1 });
   res.json(inquiries);
 });
 
