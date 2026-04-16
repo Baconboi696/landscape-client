@@ -62,7 +62,6 @@ const Properties = () => {
                 <th className="px-6 py-5 text-left">Internal Name</th>
                 <th className="px-6 py-5 text-left">Location</th>
                 <th className="px-6 py-5 text-left">Type</th>
-                <th className="px-6 py-5 text-left">Price</th>
                 <th className="px-6 py-5 text-center">Actions</th>
               </tr>
             </thead>
@@ -74,7 +73,6 @@ const Properties = () => {
                   <td className="px-8 py-6">
                     <span className="px-3 py-1 bg-black/5 rounded-full">{property.type}</span>
                   </td>
-                  <td className="px-8 py-6 font-black">${property.price?.toLocaleString()}</td>
                   <td className="px-8 py-6">
                     <div className="flex justify-center gap-3">
                       <button className="px-4 py-2 border border-black/10 rounded-xl font-bold hover:bg-black hover:text-white transition-all" onClick={() => navigate(`/admin/edit-property/${property._id}`)}>Edit</button>

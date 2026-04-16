@@ -11,14 +11,13 @@ const PropertyList = () => {
   const [error, setError] = useState(null);
   const [category, setCategory] = useState('all');
   const [type, setType] = useState('all');
-  const [location, setLocation] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 10000000]);
+  const [search, setSearch] = useState('');
   const [sort, setSort] = useState('default');
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/properties');
+        const res = await fetch('/api/properties');
         const data = await res.json();
         setProperties(data);
       } catch (err) {
@@ -33,14 +32,14 @@ const PropertyList = () => {
   const filtered = properties.filter(p => {
     const matchCategory = category === 'all' || p.category === category;
     const matchType = type === 'all' || p.type === type;
-    const matchLocation = location === '' || p.location.toLowerCase().includes(location.toLowerCase());
-    const matchPrice = p.price >= priceRange[0] && p.price <= priceRange[1];
-    return matchCategory && matchType && matchLocation && matchPrice;
+    const locationStr = [p.city, p.state, p.location].filter(Boolean).join(' ').toLowerCase();
+    const matchSearch = search === '' || locationStr.includes(search.toLowerCase()) || p.name.toLowerCase().includes(search.toLowerCase());
+    return matchCategory && matchType && matchSearch;
   });
 
   const sorted = [...filtered].sort((a, b) => {
-    if (sort === 'priceLowHigh') return a.price - b.price;
-    if (sort === 'priceHighLow') return b.price - a.price;
+    if (sort === 'priceLowHigh') return (a.price || 0) - (b.price || 0);
+    if (sort === 'priceHighLow') return (b.price || 0) - (a.price || 0);
     return 0;
   });
 
@@ -80,12 +79,12 @@ const PropertyList = () => {
         </div>
 
         <div className="flex-[1.5] min-w-[250px] space-y-3">
-          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Territory</label>
+          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Search</label>
           <input
             type="text"
-            placeholder="CITY / REGION"
-            value={location}
-            onChange={e => setLocation(e.target.value)}
+            placeholder="CITY / STATE / NAME"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
             className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest placeholder:text-black/10 text-[10px] shadow-sm"
           />
         </div>
@@ -93,7 +92,7 @@ const PropertyList = () => {
         <div className="flex-1 min-w-[200px] space-y-3">
           <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Sequence</label>
           <select value={sort} onChange={e => setSort(e.target.value)} className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest cursor-pointer text-[10px] appearance-none shadow-sm">
-            <option value="default">Release Date</option>
+            <option value="default">Newest First</option>
             <option value="priceLowHigh">Price: Low to High</option>
             <option value="priceHighLow">Price: High to Low</option>
           </select>

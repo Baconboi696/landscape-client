@@ -5,6 +5,11 @@ import PropertyDetailsModal from './PropertyDetailsModal';
 const PropertyCard = ({ property }) => {
   const [showModal, setShowModal] = useState(false);
 
+  // Prefer separate city/state, fall back to legacy location string
+  const locationDisplay = property.city && property.state
+    ? `${property.city}, ${property.state}`
+    : property.location || '';
+
   return (
     <>
       <motion.div
@@ -22,9 +27,12 @@ const PropertyCard = ({ property }) => {
           />
           <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700" />
 
-          <div className="absolute top-8 left-8">
+          <div className="absolute top-8 left-8 flex gap-2">
             <span className="px-5 py-2.5 bg-white/80 backdrop-blur-xl text-[9px] font-black text-black uppercase tracking-[0.2em] rounded-full border border-black/5 shadow-xl shadow-black/5">
               {property.type}
+            </span>
+            <span className="px-5 py-2.5 bg-white/80 backdrop-blur-xl text-[9px] font-black text-black/50 uppercase tracking-[0.2em] rounded-full border border-black/5 shadow-xl shadow-black/5">
+              {property.category}
             </span>
           </div>
         </div>
@@ -38,19 +46,15 @@ const PropertyCard = ({ property }) => {
               <div className="w-1.5 h-1.5 bg-black/10 rounded-full group-hover:bg-black transition-colors duration-500" />
             </div>
             <p className="text-[9px] font-bold text-black/30 uppercase tracking-[0.3em] flex items-center gap-2">
-              <span className="w-8 h-[1px] bg-black/5"></span>
-              {property.location}
+              <span className="w-8 h-[1px] bg-black/5" />
+              {locationDisplay}
             </p>
           </div>
 
           <div className="pt-6 flex items-center justify-between border-t border-black/5">
-            <div className="flex flex-col">
-              <span className="text-[8px] font-bold text-black/20 uppercase tracking-widest">Investment</span>
-              <span className="text-xl font-black text-black">
-                ${property.price?.toLocaleString()}
-              </span>
-            </div>
+            <span className="text-[9px] font-bold text-black/30 uppercase tracking-widest">Contact for details</span>
             <button
+              id={`details-btn-${property._id || property.id}`}
               className="px-6 py-3 bg-black text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-zinc-800 transition-all active:scale-95 shadow-xl shadow-black/10"
               onClick={(e) => {
                 e.stopPropagation();
