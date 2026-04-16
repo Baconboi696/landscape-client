@@ -13,7 +13,7 @@ const PropertyDetailsModal = ({ property, onClose }) => {
     setError(null);
     setSuccess(false);
     try {
-      const res = await fetch('http://localhost:5000/api/interest', {
+      const res = await fetch('http://localhost:5000/api/properties/interest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, propertyId: property._id || property.id }),
@@ -40,70 +40,89 @@ const PropertyDetailsModal = ({ property, onClose }) => {
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className="bg-white rounded-xl shadow-lg max-w-lg w-full p-6 relative"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[3rem] border border-black/5 shadow-2xl relative"
         >
           <button
-            className="absolute top-2 right-2 text-gray-500 hover:text-purple-600 text-xl"
             onClick={onClose}
+            className="absolute top-8 right-8 z-10 p-4 bg-white/80 backdrop-blur-md rounded-full border border-black/5 hover:bg-black hover:text-white transition-all"
           >
-            &times;
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
-          <img src={property.image} alt={property.name} className="w-full h-56 object-cover rounded mb-4" />
-          <h2 className="text-2xl font-bold text-purple-700 mb-2">{property.name}</h2>
-          <p className="text-pink-500 font-medium mb-1">{property.category ? property.category.charAt(0).toUpperCase() + property.category.slice(1) : ''}</p>
-          <p className="text-gray-600 mb-2">Location: {property.location}</p>
-          <p className="text-xl font-bold text-gray-900 mb-3">Price: {property.price}</p>
-          <p className="font-semibold text-gray-800 mb-1">Description:</p>
-          <p className="text-gray-700 mb-4">{property.description}</p>
-          {property.amenities && property.amenities.length > 0 && (
-            <div className="mb-4">
-              <span className="font-semibold text-gray-800">Amenities:</span>
-              <ul className="list-disc ml-6 text-gray-600">
-                {property.amenities.map((a, i) => (
-                  <li key={i}>{a}</li>
-                ))}
-              </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+            <div className="h-[400px] md:h-full bg-zinc-50">
+              <img
+                src={property.images?.[0] || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c'}
+                alt={property.name}
+                className="w-full h-full object-cover grayscale"
+              />
             </div>
-          )}
-          {/* If there are multiple images, show a simple carousel */}
-          {property.images && property.images.length > 1 && (
-            <div className="flex gap-2 mt-4 overflow-x-auto">
-              {property.images.map((img, idx) => (
-                <img key={idx} src={img} alt={`Property ${idx}`} className="h-20 w-32 object-cover rounded" />
-              ))}
+
+            <div className="p-12 space-y-10">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="px-4 py-1.5 bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded-full">
+                    {property.type}
+                  </span>
+                  <span className="text-black/20 text-xs italic uppercase tracking-widest">{property.category}</span>
+                </div>
+                <h2 className="text-5xl font-black text-black uppercase tracking-tighter leading-none mb-4">{property.name}</h2>
+                <p className="text-sm font-bold text-black/40 uppercase tracking-[0.2em]">{property.location}</p>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-[10px] font-black uppercase text-black/30 tracking-[0.3em]">Intelligence</h3>
+                <p className="text-sm text-black/60 leading-relaxed font-medium">{property.description}</p>
+              </div>
+              {property.amenities && property.amenities.length > 0 && (
+                <div className="mb-4">
+                  <span className="font-semibold text-gray-800">Amenities:</span>
+                  <ul className="list-disc ml-6 text-gray-600">
+                    {property.amenities.map((a, i) => (
+                      <li key={i}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {/* If there are multiple images, show a simple carousel */}
+              {property.images && property.images.length > 1 && (
+                <div className="flex gap-2 mt-4 overflow-x-auto">
+                  {property.images.map((img, idx) => (
+                    <img key={idx} src={img} alt={`Property ${idx}`} className="h-20 w-32 object-cover rounded" />
+                  ))}
+                </div>
+              )}
+              {/* Google Maps iframe */}
+              <div className="mt-4">
+                <iframe
+                  title="map"
+                  width="100%"
+                  height="180"
+                  style={{ border: 0, borderRadius: '0.5rem' }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(property.location)}&output=embed`}
+                />
+              </div>
+              <button
+                className="mt-8 w-full py-5 bg-black text-white font-bold uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all active:scale-95 flex items-center justify-center gap-3 rounded-2xl shadow-xl shadow-black/10"
+                onClick={() => setShowInterest(true)}
+              >
+                Acquire Interest
+              </button>
+              {showInterest && (
+                <InterestFormModal
+                  property={property}
+                  onClose={() => { setShowInterest(false); setSuccess(false); setError(null); }}
+                  onSubmit={handleInterestSubmit}
+                  submitting={submitting}
+                  success={success}
+                  error={error}
+                />
+              )}
             </div>
-          )}
-          {/* Google Maps iframe */}
-          <div className="mt-4">
-            <iframe
-              title="map"
-              width="100%"
-              height="180"
-              style={{ border: 0, borderRadius: '0.5rem' }}
-              loading="lazy"
-              allowFullScreen
-              src={`https://www.google.com/maps?q=${encodeURIComponent(property.location)}&output=embed`}
-            />
           </div>
-          <button
-            className="mt-6 w-full py-2 rounded bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold shadow hover:from-pink-600 hover:to-purple-600 transition"
-            onClick={() => setShowInterest(true)}
-          >
-            I am Interested
-          </button>
-          {showInterest && (
-            <InterestFormModal
-              property={property}
-              onClose={() => { setShowInterest(false); setSuccess(false); setError(null); }}
-              onSubmit={handleInterestSubmit}
-              submitting={submitting}
-              success={success}
-              error={error}
-            />
-          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>

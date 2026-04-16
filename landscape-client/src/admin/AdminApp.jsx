@@ -11,7 +11,7 @@ import ProtectedRoute from './ProtectedRoute';
 const AdminApp = () => (
   <div className="flex min-h-screen">
     <Sidebar />
-    <div className="flex-1 ml-64">
+    <div className="flex-1 ml-80">
       <Routes>
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/properties" element={<ProtectedRoute><Properties /></ProtectedRoute>} />

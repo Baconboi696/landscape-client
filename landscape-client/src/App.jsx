@@ -1,5 +1,6 @@
-import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import PropertyCard from './components/PropertyCard';
@@ -9,41 +10,71 @@ import PropertyList from './components/PropertyList';
 import Login from './admin/Login';
 import AdminApp from './admin/AdminApp';
 
+const PageTransition = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ctrl + Alt + A to access admin
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+        navigate('/admin/login');
+      }
+    }; 
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex flex-col">
+    <div className="min-h-screen bg-white text-black flex flex-col grain-overlay">
       <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <HeroSection />
-              <section className="px-4 pb-16">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Featured Properties</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                  {featuredProperties.map(property => (
-                    <PropertyCard key={property.id} property={property} />
-                  ))}
-                </div>
-                <div className="flex justify-center mt-8">
-                  <button
-                    className="px-6 py-3 rounded-lg bg-purple-500 text-white font-semibold shadow hover:bg-purple-600 transition"
-                    onClick={() => navigate('/properties')}
-                  >
-                    View All Properties
-                  </button>
-                </div>
-              </section>
-            </>
-          }
-        />
-        <Route path="/properties" element={<PropertyList />} />
-        <Route path="/admin/login" element={<Login />} />
-        <Route path="/admin/*" element={<AdminApp />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/"
+            element={
+              <PageTransition>
+                <HeroSection />
+                <section className="px-8 pb-32 max-w-7xl mx-auto w-full">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 border-b border-black/5 pb-10">
+                    <div>
+                      <h2 className="text-5xl font-black text-black tracking-tighter uppercase">Featured</h2>
+                      <p className="text-black/40 font-bold mt-2 uppercase tracking-widest text-[10px]">Hand-picked elite sanctuaries from our collection.</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                    {featuredProperties.map(property => (
+                      <PropertyCard key={property.id} property={property} />
+                    ))}
+                  </div>
+                  <div className="flex justify-center mt-20">
+                    <button
+                      className="px-16 py-6 bg-black text-white font-bold uppercase tracking-[0.4em] hover:bg-zinc-800 transition-all active:scale-95 rounded-2xl shadow-xl shadow-black/10 text-xs"
+                      onClick={() => navigate('/properties')}
+                    >
+                      View All Assets
+                    </button>
+                  </div>
+                </section>
+              </PageTransition>
+            }
+          />
+          <Route path="/properties" element={<PageTransition><PropertyList /></PageTransition>} />
+          <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/admin/*" element={<PageTransition><AdminApp /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
       <Footer />
     </div>
   );

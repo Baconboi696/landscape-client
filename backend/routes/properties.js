@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const Property = require('../models/Property');
+const Inquiry = require('../models/Inquiry');
 
 // GET /api/properties - fetch all properties
 router.get('/', async (req, res) => {
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /api/interest - send interest email
+// POST /api/properties/interest - send interest email and save inquiry
 router.post('/interest', async (req, res) => {
   const { name, email, phone, message, propertyId } = req.body;
   try {
@@ -35,10 +36,20 @@ router.post('/interest', async (req, res) => {
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}\nProperty: ${property.name} (${property.location})`,
     };
 
-    await transporter.sendMail(mailOptions);
+    // Save inquiry to database
+    const inquiry = new Inquiry({
+      name,
+      email,
+      phone,
+      message,
+      property: propertyId,
+    });
+    await inquiry.save();
+
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to send email' });
+    console.error('Error in /interest:', err);
+    res.status(500).json({ error: 'Failed to process interest' });
   }
 });
 

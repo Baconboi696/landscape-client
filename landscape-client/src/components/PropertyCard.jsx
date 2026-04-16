@@ -8,24 +8,58 @@ const PropertyCard = ({ property }) => {
   return (
     <>
       <motion.div
-        className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition transform"
         initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 30 }}
-        whileHover={{ scale: 1.05 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+        className="group relative bg-white border border-black/5 rounded-[3rem] overflow-hidden hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.06)] transition-all duration-700"
       >
-        <img src={property.image} alt={property.name} className="w-full h-48 object-cover" />
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-purple-700 mb-2">{property.name}</h3>
-          <p className="text-sm font-medium text-pink-500 mb-1">{property.category ? property.category.charAt(0).toUpperCase() + property.category.slice(1) : ''}</p>
-          <p className="text-gray-600 mb-1">{property.location}</p>
-          <p className="text-xl font-bold text-gray-900 mb-3">{property.price}</p>
-          <button
-            className="w-full py-2 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold shadow hover:from-purple-600 hover:to-pink-600 transition"
-            onClick={() => setShowModal(true)}
-          >
-            View Details
-          </button>
+        <div className="relative aspect-[4/5] overflow-hidden">
+          <motion.img
+            src={property.images?.[0] || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c'}
+            alt={property.name}
+            className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0"
+          />
+          <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700" />
+
+          <div className="absolute top-8 left-8">
+            <span className="px-5 py-2.5 bg-white/80 backdrop-blur-xl text-[9px] font-black text-black uppercase tracking-[0.2em] rounded-full border border-black/5 shadow-xl shadow-black/5">
+              {property.type}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-10 space-y-6">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-black text-black uppercase tracking-tighter leading-none">
+                {property.name}
+              </h3>
+              <div className="w-1.5 h-1.5 bg-black/10 rounded-full group-hover:bg-black transition-colors duration-500" />
+            </div>
+            <p className="text-[9px] font-bold text-black/30 uppercase tracking-[0.3em] flex items-center gap-2">
+              <span className="w-8 h-[1px] bg-black/5"></span>
+              {property.location}
+            </p>
+          </div>
+
+          <div className="pt-6 flex items-center justify-between border-t border-black/5">
+            <div className="flex flex-col">
+              <span className="text-[8px] font-bold text-black/20 uppercase tracking-widest">Investment</span>
+              <span className="text-xl font-black text-black">
+                ${property.price?.toLocaleString()}
+              </span>
+            </div>
+            <button
+              className="px-6 py-3 bg-black text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-zinc-800 transition-all active:scale-95 shadow-xl shadow-black/10"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowModal(true);
+              }}
+            >
+              Details
+            </button>
+          </div>
         </div>
       </motion.div>
       {showModal && (

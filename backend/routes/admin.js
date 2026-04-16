@@ -35,6 +35,41 @@ router.post('/logout', (req, res) => {
   res.json({ success: true });
 });
 
+// GET /api/admin/analytics (protected)
+router.get('/analytics', auth, async (req, res) => {
+  try {
+    const totalProperties = await Property.countDocuments();
+    const totalInquiries = await Inquiry.countDocuments();
+    const pendingInquiries = await Inquiry.countDocuments({ responded: false });
+
+    // Simple monthly aggregation for properties
+    const properties = await Property.find({}, 'createdAt category');
+    const monthlyGroups = {};
+    const typeGroups = {};
+
+    properties.forEach(p => {
+      const month = p.createdAt.toLocaleString('default', { month: 'short' });
+      monthlyGroups[month] = (monthlyGroups[month] || 0) + 1;
+
+      const type = p.category || 'Other';
+      typeGroups[type] = (typeGroups[type] || 0) + 1;
+    });
+
+    const monthlyData = Object.entries(monthlyGroups).map(([month, count]) => ({ month, count }));
+    const typeData = Object.entries(typeGroups).map(([name, value]) => ({ name, value }));
+
+    res.json({
+      totalProperties,
+      totalInquiries,
+      pendingInquiries,
+      monthly: monthlyData,
+      types: typeData,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch analytics' });
+  }
+});
+
 // GET /api/admin/properties (protected)
 router.get('/properties', auth, async (req, res) => {
   const properties = await Property.find();

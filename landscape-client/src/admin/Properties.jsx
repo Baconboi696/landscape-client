@@ -10,7 +10,7 @@ const Properties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/admin/properties', {
+        const res = await fetch('/api/admin/properties', {
           credentials: 'include',
         });
         const data = await res.json();
@@ -26,7 +26,7 @@ const Properties = () => {
 
   const handleDelete = async id => {
     if (!window.confirm('Delete this property?')) return;
-    await fetch(`http://localhost:5000/api/admin/properties/${id}`, {
+    await fetch(`/api/admin/properties/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -34,37 +34,52 @@ const Properties = () => {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-purple-700 mb-4">Properties</h1>
-      <button className="mb-4 px-4 py-2 bg-purple-500 text-white rounded" onClick={() => navigate('/admin/add-property')}>Add Property</button>
+    <div className="p-10 space-y-10">
+      <div className="flex justify-between items-end border-b border-black/5 pb-10">
+        <div>
+          <h1 className="text-4xl font-black text-black tracking-tighter uppercase">Inventory</h1>
+          <p className="text-black/30 font-bold mt-1 uppercase tracking-widest text-[10px]">Management of prestigious assets.</p>
+        </div>
+        <button
+          className="px-8 py-3 bg-black text-white font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95 rounded-full text-xs shadow-lg shadow-black/10"
+          onClick={() => navigate('/admin/add-property')}
+        >
+          Add Asset
+        </button>
+      </div>
       {loading ? (
-        <div className="text-center py-10 animate-pulse">Loading properties...</div>
+        <div className="flex flex-col items-center justify-center py-20 text-black/20">
+          <div className="w-8 h-8 border-2 border-t-black border-zinc-100 rounded-full animate-spin mb-4" />
+          <p className="text-[10px] font-bold uppercase tracking-widest animate-pulse">Scanning Inventory...</p>
+        </div>
       ) : error ? (
-        <div className="text-center py-10 text-red-500">{error}</div>
+        <div className="text-center py-10 text-black font-bold uppercase border border-black/5 p-8 rounded-3xl">{error}</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-xl shadow">
-            <thead>
+        <div className="overflow-hidden border border-black/5 bg-white rounded-[2.5rem] shadow-sm">
+          <table className="min-w-full">
+            <thead className="bg-zinc-50 border-b border-black/5 text-black/30 uppercase text-[8px] font-bold tracking-[0.3em]">
               <tr>
-                <th className="px-4 py-2">Title</th>
-                <th className="px-4 py-2">Location</th>
-                <th className="px-4 py-2">Type</th>
-                <th className="px-4 py-2">Category</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Actions</th>
+                <th className="px-6 py-5 text-left">Internal Name</th>
+                <th className="px-6 py-5 text-left">Location</th>
+                <th className="px-6 py-5 text-left">Type</th>
+                <th className="px-6 py-5 text-left">Price</th>
+                <th className="px-6 py-5 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-black font-bold uppercase text-[9px] tracking-widest divide-y divide-black/5">
               {properties.map(property => (
-                <tr key={property._id} className="border-t">
-                  <td className="px-4 py-2">{property.name}</td>
-                  <td className="px-4 py-2">{property.location}</td>
-                  <td className="px-4 py-2">{property.type}</td>
-                  <td className="px-4 py-2">{property.category}</td>
-                  <td className="px-4 py-2">{property.price}</td>
-                  <td className="px-4 py-2 flex gap-2">
-                    <button className="px-2 py-1 bg-blue-500 text-white rounded" onClick={() => navigate(`/admin/edit-property/${property._id}`)}>Edit</button>
-                    <button className="px-2 py-1 bg-red-500 text-white rounded" onClick={() => handleDelete(property._id)}>Delete</button>
+                <tr key={property._id} className="hover:bg-zinc-50 transition-colors">
+                  <td className="px-8 py-6">{property.name}</td>
+                  <td className="px-8 py-6 text-black/40">{property.location}</td>
+                  <td className="px-8 py-6">
+                    <span className="px-3 py-1 bg-black/5 rounded-full">{property.type}</span>
+                  </td>
+                  <td className="px-8 py-6 font-black">${property.price?.toLocaleString()}</td>
+                  <td className="px-8 py-6">
+                    <div className="flex justify-center gap-3">
+                      <button className="px-4 py-2 border border-black/10 rounded-xl font-bold hover:bg-black hover:text-white transition-all" onClick={() => navigate(`/admin/edit-property/${property._id}`)}>Edit</button>
+                      <button className="px-4 py-2 bg-black text-white rounded-xl font-bold hover:bg-zinc-800 transition-all" onClick={() => handleDelete(property._id)}>Delete</button>
+                    </div>
                   </td>
                 </tr>
               ))}
