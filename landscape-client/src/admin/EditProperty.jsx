@@ -19,7 +19,7 @@ const EditProperty = () => {
     images: [],
     videos: [],
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [success, setSuccess] = useState(false);
@@ -140,7 +140,7 @@ const EditProperty = () => {
             onClick={() => navigate('/admin/properties')}
             className="px-8 py-3 border border-white/20 text-white text-xs font-light tracking-[0.2em] uppercase hover:text-gold hover:border-gold transition-colors"
           >
-            Return to Portfolio
+            Return to Properties
           </button>
         </div>
       </div>
@@ -152,19 +152,19 @@ const EditProperty = () => {
       <header className="border-b border-white/10 pb-8 flex items-end justify-between">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <h1 className="text-4xl font-extralight text-white tracking-wide">Edit Asset</h1>
-          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Modify Portfolio Listing: <span className="text-gold">{form.name}</span></p>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Modify Properties Listing: <span className="text-gold">{form.name}</span></p>
         </motion.div>
         <button
-            onClick={() => navigate('/admin/properties')}
-            className="px-6 py-2 border border-white/10 text-white/40 text-[10px] font-light tracking-[0.2em] uppercase hover:text-white transition-colors"
-          >
-            Cancel
+          onClick={() => navigate('/admin/properties')}
+          className="px-6 py-2 border border-white/10 text-white/40 text-[10px] font-light tracking-[0.2em] uppercase hover:text-white transition-colors"
+        >
+          Cancel
         </button>
       </header>
 
-      <motion.form 
+      <motion.form
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
-        onSubmit={handleSubmit} 
+        onSubmit={handleSubmit}
         className="bg-[#0a0a0a] border border-white/5 p-8 md:p-12 w-full max-w-3xl flex flex-col gap-10"
       >
         {/* Name */}
@@ -210,7 +210,7 @@ const EditProperty = () => {
         </div>
 
         {/* Type, Category, Price */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-3">
             <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Listing Type</label>
             <select name="type" value={form.type} onChange={handleChange}
@@ -245,7 +245,7 @@ const EditProperty = () => {
           </label>
           <div className="relative group">
             <input name="images" type="file" multiple accept="image/*" onChange={handleImageChange}
-              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
+              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden"
               title="Click to select images" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
               {form.images.length > 0 ? `${form.images.length} New Media Files Selected` : 'Click to Upload Replacement Images'}
@@ -261,7 +261,7 @@ const EditProperty = () => {
           </label>
           <div className="relative group">
             <input name="videos" type="file" multiple accept="video/*" onChange={handleVideoChange}
-              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
+              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden"
               title="Click to select videos" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
               {form.videos.length > 0 ? `${form.videos.length} New Media Files Selected` : 'Click to Upload Replacement Videos'}
@@ -275,7 +275,7 @@ const EditProperty = () => {
           disabled={loading}
         >
           <div className="absolute inset-0 bg-gold w-0 group-hover:w-full transition-all duration-700 ease-out z-0 opacity-10" />
-          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Update Portfolio Listing'}</span>
+          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Update Properties Listing'}</span>
         </button>
 
         {success && <div className="p-4 border border-gold text-gold text-[10px] font-light uppercase tracking-widest text-center bg-gold/5">Asset Updated. Synchronizing...</div>}

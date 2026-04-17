@@ -72,7 +72,7 @@ const Navbar = () => {
             className="md:hidden absolute top-full left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 overflow-hidden flex flex-col items-center justify-center space-y-8"
           >
             <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/'); setMenuOpen(false); }}>Home</button>
-            <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Portfolio</button>
+            <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Properties</button>
             <button className="mt-8 px-10 py-4 border border-gold text-gold font-light tracking-[0.2em] uppercase hover:bg-gold hover:text-black transition-all" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Search</button>
           </motion.div>
         )}

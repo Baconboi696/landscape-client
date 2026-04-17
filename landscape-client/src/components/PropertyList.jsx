@@ -56,7 +56,7 @@ const PropertyList = () => {
     <section className="px-6 py-32 max-w-7xl mx-auto w-full pt-48">
       <div className="mb-16 border-b border-white/10 pb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">Our Portfolio</span>
+          <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">Our Properties</span>
           <h2 className="text-5xl md:text-7xl font-extralight text-white tracking-tight">The <span className="font-serif italic text-gold">Collection</span></h2>
         </div>
         <div className="text-xs font-light uppercase tracking-[0.2em] text-white/50">
@@ -103,7 +103,7 @@ const PropertyList = () => {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-32 text-gold">
           <div className="w-12 h-12 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
-          <p className="text-xs font-light uppercase tracking-[0.2em]">Loading Portfolio...</p>
+          <p className="text-xs font-light uppercase tracking-[0.2em]">Loading Properties...</p>
         </div>
       ) : error ? (
         <div className="text-center py-20 text-red-500 border border-red-500/20 bg-red-500/5 font-light uppercase tracking-widest">{error}</div>

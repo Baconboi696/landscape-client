@@ -39,7 +39,7 @@ const Properties = () => {
       <header className="flex justify-between items-end border-b border-white/10 pb-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <h1 className="text-4xl font-extralight text-white tracking-wide">Property Management</h1>
-          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Curate Portfolio Listings</p>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Curate Properties Listings</p>
         </motion.div>
         <motion.button
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
@@ -53,12 +53,12 @@ const Properties = () => {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-32 text-gold">
           <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
-          <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Portfolio...</p>
+          <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Properties...</p>
         </div>
       ) : error ? (
         <div className="text-center py-10 text-red-500 font-light tracking-[0.1em] uppercase border border-red-500/20 p-8 bg-red-500/5">{error}</div>
       ) : (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
           className="overflow-x-auto border border-white/5 bg-[#0a0a0a]"
         >

@@ -15,7 +15,7 @@ const AdminApp = () => {
     <div className="flex min-h-screen bg-[#050505] font-sans text-white relative">
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/80 z-40 lg:hidden backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
@@ -27,7 +27,7 @@ const AdminApp = () => {
         {/* Admin Top Navbar */}
         <header className="h-20 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6 lg:px-10">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden p-2 text-white/50 hover:text-white transition-colors"
               onClick={() => setSidebarOpen(true)}
             >
@@ -39,9 +39,9 @@ const AdminApp = () => {
               <svg className="w-4 h-4 text-white/40 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <input 
-                type="text" 
-                placeholder="Search portfolio..." 
+              <input
+                type="text"
+                placeholder="Search properties..."
                 className="bg-transparent border-none outline-none text-xs font-light tracking-widest text-white placeholder:text-white/30 w-full uppercase"
               />
             </div>

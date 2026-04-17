@@ -44,7 +44,7 @@ const Dashboard = () => {
           <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Data...</p>
         </div>
       ) : (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -81,9 +81,9 @@ const Dashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#ffffff50', textTransform: 'uppercase' }} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#ffffff50' }} dx={-10} />
-                  <Tooltip 
-                    cursor={{ fill: '#ffffff05' }} 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }} 
+                  <Tooltip
+                    cursor={{ fill: '#ffffff05' }}
+                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }}
                     itemStyle={{ color: '#d4af37' }}
                   />
                   <Bar dataKey="count" fill="#d4af37" radius={[2, 2, 0, 0]} barSize={20} />
@@ -92,7 +92,7 @@ const Dashboard = () => {
             </div>
 
             <div className="bg-[#0a0a0a] p-8 border border-white/5">
-              <h3 className="text-xs font-light text-white tracking-[0.2em] uppercase mb-8">Portfolio Distribution</h3>
+              <h3 className="text-xs font-light text-white tracking-[0.2em] uppercase mb-8">Property Distribution</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -107,8 +107,8 @@ const Dashboard = () => {
                       <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#d4af37' : '#ffffff20'} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }} 
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }}
                     itemStyle={{ color: '#fff' }}
                   />
                 </PieChart>

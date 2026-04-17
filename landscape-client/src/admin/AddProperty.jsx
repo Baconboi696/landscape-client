@@ -82,13 +82,13 @@ const AddProperty = () => {
       <header className="border-b border-white/10 pb-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <h1 className="text-4xl font-extralight text-white tracking-wide">Register Asset</h1>
-          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Add new prestigious properties to portfolio</p>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Add new prestigious properties</p>
         </motion.div>
       </header>
 
-      <motion.form 
+      <motion.form
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
-        onSubmit={handleSubmit} 
+        onSubmit={handleSubmit}
         className="bg-[#0a0a0a] border border-white/5 p-8 md:p-12 w-full max-w-3xl flex flex-col gap-10"
       >
         {/* Name */}
@@ -134,7 +134,7 @@ const AddProperty = () => {
         </div>
 
         {/* Type, Category, Price */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-3">
             <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Listing Type</label>
             <select name="type" value={form.type} onChange={handleChange}
@@ -166,7 +166,7 @@ const AddProperty = () => {
           <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Photography</label>
           <div className="relative group">
             <input name="images" type="file" multiple accept="image/*" onChange={handleImageChange}
-              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
+              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden"
               title="Click to select images" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
               {form.images.length > 0 ? `${form.images.length} Media Files Selected` : 'Click to Upload High-Res Images'}
@@ -179,7 +179,7 @@ const AddProperty = () => {
           <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Cinematography</label>
           <div className="relative group">
             <input name="videos" type="file" multiple accept="video/*" onChange={handleVideoChange}
-              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
+              className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden"
               title="Click to select videos" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
               {form.videos.length > 0 ? `${form.videos.length} Media Files Selected` : 'Click to Upload Cinematic Videos'}
@@ -193,7 +193,7 @@ const AddProperty = () => {
           disabled={loading}
         >
           <div className="absolute inset-0 bg-gold w-0 group-hover:w-full transition-all duration-700 ease-out z-0 opacity-10" />
-          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Submit Portfolio Listing'}</span>
+          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Submit Property Listing'}</span>
         </button>
 
         {success && <div className="p-4 border border-gold text-gold text-[10px] font-light uppercase tracking-widest text-center bg-gold/5">Asset Recorded. Synchronizing...</div>}

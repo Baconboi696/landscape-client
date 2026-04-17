@@ -79,7 +79,7 @@ function HomePage() {
           </div>
         ) : featured.length === 0 ? (
           <div className="text-center py-20 text-white/50 text-lg font-light tracking-wide">
-            Portfolio currently unavailable.
+            Property currently unavailable.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
@@ -140,15 +140,15 @@ const App = () => {
           />
           <Route path="/properties" element={<PageTransition><PropertyList /></PageTransition>} />
           <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
-          <Route 
-            path="/admin/*" 
+          <Route
+            path="/admin/*"
             element={
               <PageTransition>
                 <ProtectedRoute>
                   <AdminApp />
                 </ProtectedRoute>
               </PageTransition>
-            } 
+            }
           />
         </Routes>
       </AnimatePresence>
