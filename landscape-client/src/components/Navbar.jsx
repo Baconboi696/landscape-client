@@ -1,90 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <nav className="w-full py-4 px-8 glass-morphism sticky top-0 z-50 flex justify-between items-center transition-all duration-300">
-      <div
-        className="flex items-center gap-4 cursor-pointer group"
-        onClick={() => navigate('/')}
-      >
-        <div className="relative w-12 h-12 flex items-center justify-center">
-          <motion.div
-            className="absolute inset-0 bg-black rounded-2xl shadow-2xl shadow-black/10 transition-all duration-500 group-hover:rotate-45"
-          />
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            className="relative z-10 text-white group-hover:scale-110 transition-transform duration-500"
-          >
-            <path d="M3 21H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M5 21V7L12 3L19 7V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M9 21V12H15V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-        <div className="flex flex-col -space-y-1">
-          <span className="text-2xl font-black tracking-tighter text-black uppercase leading-none">
-            LandScape
-          </span>
-          <span className="text-[8px] font-bold tracking-[0.4em] text-black/20 uppercase">
-            Elite Real Estate
-          </span>
-        </div>
-      </div>
+  const [scrolled, setScrolled] = useState(false);
 
-      <div className="hidden md:flex items-center space-x-10">
-        <button
-          className="text-xs font-black uppercase tracking-[0.2em] text-black hover:opacity-50 transition-all relative group"
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <nav className={`fixed w-full top-0 z-50 transition-all duration-700 ${scrolled ? 'bg-[#050505]/90 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-8'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div
+          className="flex items-center gap-4 cursor-pointer group"
           onClick={() => navigate('/')}
         >
-          Home
-          <span className="absolute -bottom-1 left-0 w-0 h-1 bg-black transition-all group-hover:w-full" />
-        </button>
+          <div className="w-12 h-12 border border-gold/50 rounded-full flex items-center justify-center text-gold group-hover:border-gold transition-all duration-500">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M3 21H21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+              <path d="M5 21V7L12 3L19 7V21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-2xl font-extralight text-white tracking-[0.2em] uppercase group-hover:text-gold transition-colors duration-500">
+            Landscape
+          </span>
+        </div>
+
+        <div className="hidden md:flex items-center space-x-12">
+          <button
+            className="text-xs font-light text-white/70 hover:text-gold transition-colors tracking-[0.15em] uppercase relative group"
+            onClick={() => navigate('/')}
+          >
+            Home
+            <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
+          </button>
+          <button
+            className="text-xs font-light text-white/70 hover:text-gold transition-colors tracking-[0.15em] uppercase relative group"
+            onClick={() => navigate('/properties')}
+          >
+            Properties
+            <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
+          </button>
+          <button
+            className="px-8 py-3 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-gold transition-all duration-500"
+            onClick={() => navigate('/properties')}
+          >
+            Search
+          </button>
+        </div>
+
         <button
-          className="text-xs font-black uppercase tracking-[0.2em] text-black hover:opacity-50 transition-all relative group"
-          onClick={() => navigate('/properties')}
+          className="md:hidden p-2 text-white/70 hover:text-gold"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          Properties
-          <span className="absolute -bottom-1 left-0 w-0 h-1 bg-black transition-all group-hover:w-full" />
-        </button>
-        <button
-          className="px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all active:scale-95 rounded-full"
-          onClick={() => navigate('/properties')}
-        >
-          Explore
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 8h16M4 16h16"}></path></svg>
         </button>
       </div>
-
-      <button
-        className="md:hidden p-4 border border-black/5 bg-zinc-50 rounded-full hover:bg-black hover:text-white group transition-all"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        <div className="w-5 h-0.5 bg-black group-hover:bg-white mb-1.5 rounded-full" />
-        <div className="w-5 h-0.5 bg-black group-hover:bg-white mb-1.5 rounded-full" />
-        <div className="w-5 h-0.5 bg-black group-hover:bg-white rounded-full" />
-      </button>
 
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="absolute top-24 left-6 right-6 bg-white border border-black/5 p-8 md:hidden flex flex-col space-y-6 rounded-[2.5rem] shadow-2xl z-[60]"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: '100vh', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="md:hidden absolute top-full left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/10 overflow-hidden flex flex-col items-center justify-center space-y-8"
           >
-            <button className="text-2xl font-black uppercase text-black text-left tracking-tighter" onClick={() => { navigate('/'); setMenuOpen(false); }}>Home</button>
-            <button className="text-2xl font-black uppercase text-black text-left tracking-tighter" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Properties</button>
-            <button className="w-full py-5 bg-black text-white font-bold uppercase tracking-[0.3em] rounded-2xl shadow-xl shadow-black/10" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Explore</button>
+            <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/'); setMenuOpen(false); }}>Home</button>
+            <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Portfolio</button>
+            <button className="mt-8 px-10 py-4 border border-gold text-gold font-light tracking-[0.2em] uppercase hover:bg-gold hover:text-black transition-all" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Search</button>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
   );
 };
-
 export default Navbar;

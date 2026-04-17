@@ -21,8 +21,17 @@ const ProtectedRoute = ({ children }) => {
     checkAuth();
   }, []);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Checking authentication...</div>;
-  if (!auth) return <Navigate to="/admin/login" />;
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-[#050505]">
+      <div className="flex flex-col items-center">
+        <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+        <p className="text-xs font-light tracking-[0.2em] text-gold uppercase animate-pulse">Verifying Credentials...</p>
+      </div>
+    </div>
+  );
+  
+  if (!auth) return <Navigate to="/admin/login" replace />;
+  
   return children;
 };
 

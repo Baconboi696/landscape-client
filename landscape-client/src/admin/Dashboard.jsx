@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { motion } from 'framer-motion';
 
 const Dashboard = () => {
   const [analytics, setAnalytics] = useState({
@@ -29,40 +30,42 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="p-10 space-y-12 max-w-7xl mx-auto">
-      <header className="flex justify-between items-end border-b border-black/5 pb-10">
-        <div>
-          <h1 className="text-4xl font-black text-black tracking-tighter uppercase">Dashboard</h1>
-          <p className="text-black/30 font-bold mt-1 uppercase tracking-widest text-[10px]">System performance overview.</p>
-        </div>
-        <div className="px-5 py-2 bg-black text-white text-[9px] font-bold uppercase tracking-[0.2em] rounded-full">
-          Live Sync
-        </div>
+    <div className="p-8 md:p-12 max-w-7xl mx-auto space-y-10 min-h-screen">
+      <header className="flex justify-between items-end border-b border-white/10 pb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <h1 className="text-4xl font-extralight text-white tracking-wide">Overview Dashboard</h1>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Platform Performance Metrics</p>
+        </motion.div>
       </header>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-32 text-black">
-          <div className="w-10 h-10 border-2 border-t-black border-zinc-100 rounded-full animate-spin mb-4" />
-          <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-black/20 animate-pulse">Synchronizing Portfolio...</p>
+        <div className="flex flex-col items-center justify-center py-32 text-gold">
+          <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+          <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Data...</p>
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-[2.5rem] border border-black/5 shadow-sm space-y-2">
-              <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Properties</p>
-              <p className="text-4xl font-black text-black">{analytics.totalProperties || 0}</p>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="space-y-10"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-[#0a0a0a] p-8 border border-white/5 flex flex-col justify-between hover:border-gold/30 transition-colors">
+              <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] mb-4">Total Listings</p>
+              <p className="text-4xl font-extralight text-white">{analytics.totalProperties || 0}</p>
             </div>
-            <div className="bg-white p-8 rounded-[2.5rem] border border-black/5 shadow-sm space-y-2">
-              <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Inquiries</p>
-              <p className="text-4xl font-black text-black">{analytics.totalInquiries || 0}</p>
+            <div className="bg-[#0a0a0a] p-8 border border-white/5 flex flex-col justify-between hover:border-gold/30 transition-colors">
+              <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] mb-4">Inquiries</p>
+              <p className="text-4xl font-extralight text-white">{analytics.totalInquiries || 0}</p>
             </div>
-            <div className="bg-white p-8 rounded-[2.5rem] border border-black/5 shadow-sm space-y-2">
-              <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Pending</p>
-              <p className="text-4xl font-black text-black">{analytics.pendingInquiries || 0}</p>
+            <div className="bg-[#0a0a0a] p-8 border border-white/5 flex flex-col justify-between hover:border-gold/30 transition-colors">
+              <p className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] mb-4">Pending Follow-up</p>
+              <p className="text-4xl font-extralight text-white">{analytics.pendingInquiries || 0}</p>
             </div>
-            <div className="bg-white p-8 rounded-[2.5rem] border border-black/10 shadow-sm space-y-2 bg-black !text-white">
-              <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Efficiency</p>
-              <p className="text-4xl font-black">
+            <div className="bg-gradient-to-br from-gold/10 to-transparent p-8 border border-gold/20 flex flex-col justify-between">
+              <p className="text-[10px] font-semibold text-gold uppercase tracking-[0.2em] mb-4">Conversion Health</p>
+              <p className="text-4xl font-extralight text-gold">
                 {analytics.totalInquiries > 0
                   ? Math.round(((analytics.totalInquiries - analytics.pendingInquiries) / analytics.totalInquiries) * 100)
                   : 0}%
@@ -70,44 +73,52 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="bg-white p-10 rounded-[2.5rem] border border-black/5 shadow-sm">
-              <h3 className="text-[10px] font-black text-black uppercase tracking-widest mb-10 border-b border-black/5 pb-4">Activity</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-[#0a0a0a] p-8 border border-white/5">
+              <h3 className="text-xs font-light text-white tracking-[0.2em] uppercase mb-8">Inquiry Volume</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={analytics.monthly}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
-                  <Tooltip cursor={{ fill: '#f8f8f8' }} contentStyle={{ borderRadius: '15px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }} />
-                  <Bar dataKey="count" fill="#000" radius={[10, 10, 0, 0]} barSize={30} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#ffffff50', textTransform: 'uppercase' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#ffffff50' }} dx={-10} />
+                  <Tooltip 
+                    cursor={{ fill: '#ffffff05' }} 
+                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }} 
+                    itemStyle={{ color: '#d4af37' }}
+                  />
+                  <Bar dataKey="count" fill="#d4af37" radius={[2, 2, 0, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="bg-white p-10 rounded-[2.5rem] border border-black/5 shadow-sm">
-              <h3 className="text-[10px] font-black text-black uppercase tracking-widest mb-10 border-b border-black/5 pb-4">Distribution</h3>
+            <div className="bg-[#0a0a0a] p-8 border border-white/5">
+              <h3 className="text-xs font-light text-white tracking-[0.2em] uppercase mb-8">Portfolio Distribution</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
                     data={analytics.types}
                     innerRadius={80}
                     outerRadius={100}
-                    paddingAngle={5}
+                    paddingAngle={2}
                     dataKey="value"
+                    stroke="none"
                   >
                     {analytics.types.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#000' : '#e0e0e0'} />
+                      <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#d4af37' : '#ffffff20'} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ borderRadius: '15px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '0', fontSize: '12px' }} 
+                    itemStyle={{ color: '#fff' }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
-        </>
+        </motion.div>
       )}
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const AddProperty = () => {
+const EditProperty = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -16,10 +19,48 @@ const AddProperty = () => {
     images: [],
     videos: [],
   });
+  
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+      navigate('/admin/properties', { replace: true });
+      return;
+    }
+
+    const fetchProperty = async () => {
+      try {
+        const res = await fetch(`/api/properties/${id}`);
+        if (!res.ok) {
+          setNotFound(true);
+          return;
+        }
+        const data = await res.json();
+        setForm({
+          name: data.name || '',
+          description: data.description || '',
+          city: data.city || '',
+          state: data.state || '',
+          lat: data.location?.coordinates?.[1] || '', // Assuming GeoJSON [lng, lat]
+          lng: data.location?.coordinates?.[0] || '',
+          type: data.type || 'sale',
+          category: data.category || 'bungalow',
+          amenities: Array.isArray(data.amenities) ? data.amenities.join(', ') : data.amenities || '',
+          images: [],
+          videos: [],
+        });
+      } catch (err) {
+        setNotFound(true);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [id, navigate]);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -57,8 +98,8 @@ const AddProperty = () => {
         formData.append('videos', file);
       }
 
-      const res = await fetch('/api/admin/properties', {
-        method: 'POST',
+      const res = await fetch(`/api/admin/properties/${id}`, {
+        method: 'PUT',
         credentials: 'include',
         body: formData,
       });
@@ -68,22 +109,57 @@ const AddProperty = () => {
         setTimeout(() => navigate('/admin/properties'), 1200);
       } else {
         const data = await res.json();
-        setError(data.details || 'Failed to add property');
+        setError(data.details || 'Failed to update property');
       }
     } catch {
-      setError('Failed to add property');
+      setError('Failed to update property');
     } finally {
       setLoading(false);
     }
   };
 
+  if (initialLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 text-gold">
+        <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+        <p className="text-xs font-light tracking-[0.2em] uppercase">Loading Asset Data...</p>
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 space-y-6">
+        <div className="text-center p-12 border border-white/10 bg-[#0a0a0a] max-w-lg w-full">
+          <svg className="w-16 h-16 text-white/20 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h2 className="text-2xl font-extralight text-white uppercase tracking-widest mb-2">Asset Not Found</h2>
+          <p className="text-xs text-white/40 tracking-wider mb-8">The requested property does not exist or has been removed.</p>
+          <button
+            onClick={() => navigate('/admin/properties')}
+            className="px-8 py-3 border border-white/20 text-white text-xs font-light tracking-[0.2em] uppercase hover:text-gold hover:border-gold transition-colors"
+          >
+            Return to Portfolio
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8 md:p-12 space-y-10 max-w-7xl mx-auto">
-      <header className="border-b border-white/10 pb-8">
+      <header className="border-b border-white/10 pb-8 flex items-end justify-between">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <h1 className="text-4xl font-extralight text-white tracking-wide">Register Asset</h1>
-          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Add new prestigious properties to portfolio</p>
+          <h1 className="text-4xl font-extralight text-white tracking-wide">Edit Asset</h1>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Modify Portfolio Listing: <span className="text-gold">{form.name}</span></p>
         </motion.div>
+        <button
+            onClick={() => navigate('/admin/properties')}
+            className="px-6 py-2 border border-white/10 text-white/40 text-[10px] font-light tracking-[0.2em] uppercase hover:text-white transition-colors"
+          >
+            Cancel
+        </button>
       </header>
 
       <motion.form 
@@ -163,26 +239,32 @@ const AddProperty = () => {
 
         {/* Images */}
         <div className="space-y-3">
-          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Photography</label>
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] flex justify-between">
+            <span>Update Photography</span>
+            <span className="text-white/20 font-light lowercase tracking-wider">(Leave blank to keep existing)</span>
+          </label>
           <div className="relative group">
             <input name="images" type="file" multiple accept="image/*" onChange={handleImageChange}
               className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
               title="Click to select images" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
-              {form.images.length > 0 ? `${form.images.length} Media Files Selected` : 'Click to Upload High-Res Images'}
+              {form.images.length > 0 ? `${form.images.length} New Media Files Selected` : 'Click to Upload Replacement Images'}
             </div>
           </div>
         </div>
 
         {/* Videos */}
         <div className="space-y-3">
-          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Cinematography</label>
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] flex justify-between">
+            <span>Update Cinematography</span>
+            <span className="text-white/20 font-light lowercase tracking-wider">(Leave blank to keep existing)</span>
+          </label>
           <div className="relative group">
             <input name="videos" type="file" multiple accept="video/*" onChange={handleVideoChange}
               className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden" 
               title="Click to select videos" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
-              {form.videos.length > 0 ? `${form.videos.length} Media Files Selected` : 'Click to Upload Cinematic Videos'}
+              {form.videos.length > 0 ? `${form.videos.length} New Media Files Selected` : 'Click to Upload Replacement Videos'}
             </div>
           </div>
         </div>
@@ -193,14 +275,14 @@ const AddProperty = () => {
           disabled={loading}
         >
           <div className="absolute inset-0 bg-gold w-0 group-hover:w-full transition-all duration-700 ease-out z-0 opacity-10" />
-          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Submit Portfolio Listing'}</span>
+          <span className="relative z-10">{loading ? 'Uploading Data...' : 'Update Portfolio Listing'}</span>
         </button>
 
-        {success && <div className="p-4 border border-gold text-gold text-[10px] font-light uppercase tracking-widest text-center bg-gold/5">Asset Recorded. Synchronizing...</div>}
+        {success && <div className="p-4 border border-gold text-gold text-[10px] font-light uppercase tracking-widest text-center bg-gold/5">Asset Updated. Synchronizing...</div>}
         {error && <div className="p-4 border border-red-500/50 text-red-500 text-[10px] font-light uppercase tracking-widest text-center bg-red-500/5">{error}</div>}
       </motion.form>
     </div>
   );
 };
 
-export default AddProperty;
+export default EditProperty;

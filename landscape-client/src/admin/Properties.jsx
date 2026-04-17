@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const Properties = () => {
   const [properties, setProperties] = useState([]);
@@ -34,56 +35,61 @@ const Properties = () => {
   };
 
   return (
-    <div className="p-10 space-y-10">
-      <div className="flex justify-between items-end border-b border-black/5 pb-10">
-        <div>
-          <h1 className="text-4xl font-black text-black tracking-tighter uppercase">Inventory</h1>
-          <p className="text-black/30 font-bold mt-1 uppercase tracking-widest text-[10px]">Management of prestigious assets.</p>
-        </div>
-        <button
-          className="px-8 py-3 bg-black text-white font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95 rounded-full text-xs shadow-lg shadow-black/10"
+    <div className="p-8 md:p-12 space-y-10 max-w-7xl mx-auto">
+      <header className="flex justify-between items-end border-b border-white/10 pb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <h1 className="text-4xl font-extralight text-white tracking-wide">Property Management</h1>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Curate Portfolio Listings</p>
+        </motion.div>
+        <motion.button
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
+          className="px-8 py-3 bg-white/5 border border-white/10 text-white hover:text-gold hover:border-gold/50 transition-all text-xs font-light tracking-[0.2em] uppercase"
           onClick={() => navigate('/admin/add-property')}
         >
-          Add Asset
-        </button>
-      </div>
+          Add Listing
+        </motion.button>
+      </header>
+
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 text-black/20">
-          <div className="w-8 h-8 border-2 border-t-black border-zinc-100 rounded-full animate-spin mb-4" />
-          <p className="text-[10px] font-bold uppercase tracking-widest animate-pulse">Scanning Inventory...</p>
+        <div className="flex flex-col items-center justify-center py-32 text-gold">
+          <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+          <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Portfolio...</p>
         </div>
       ) : error ? (
-        <div className="text-center py-10 text-black font-bold uppercase border border-black/5 p-8 rounded-3xl">{error}</div>
+        <div className="text-center py-10 text-red-500 font-light tracking-[0.1em] uppercase border border-red-500/20 p-8 bg-red-500/5">{error}</div>
       ) : (
-        <div className="overflow-hidden border border-black/5 bg-white rounded-[2.5rem] shadow-sm">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
+          className="overflow-x-auto border border-white/5 bg-[#0a0a0a]"
+        >
           <table className="min-w-full">
-            <thead className="bg-zinc-50 border-b border-black/5 text-black/30 uppercase text-[8px] font-bold tracking-[0.3em]">
+            <thead className="border-b border-white/10 text-white/30 uppercase text-[10px] font-semibold tracking-[0.2em]">
               <tr>
-                <th className="px-6 py-5 text-left">Internal Name</th>
-                <th className="px-6 py-5 text-left">Location</th>
-                <th className="px-6 py-5 text-left">Type</th>
-                <th className="px-6 py-5 text-center">Actions</th>
+                <th className="px-8 py-6 text-left">Listing Name</th>
+                <th className="px-8 py-6 text-left">Location</th>
+                <th className="px-8 py-6 text-left">Type</th>
+                <th className="px-8 py-6 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-black font-bold uppercase text-[9px] tracking-widest divide-y divide-black/5">
+            <tbody className="text-white font-light text-[11px] tracking-widest divide-y divide-white/5">
               {properties.map(property => (
-                <tr key={property._id} className="hover:bg-zinc-50 transition-colors">
+                <tr key={property._id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-8 py-6">{property.name}</td>
-                  <td className="px-8 py-6 text-black/40">{property.location}</td>
+                  <td className="px-8 py-6 text-white/40">{property.location}</td>
                   <td className="px-8 py-6">
-                    <span className="px-3 py-1 bg-black/5 rounded-full">{property.type}</span>
+                    <span className="px-3 py-1 bg-white/5 border border-white/10 text-white/60 uppercase text-[9px]">{property.type}</span>
                   </td>
                   <td className="px-8 py-6">
-                    <div className="flex justify-center gap-3">
-                      <button className="px-4 py-2 border border-black/10 rounded-xl font-bold hover:bg-black hover:text-white transition-all" onClick={() => navigate(`/admin/edit-property/${property._id}`)}>Edit</button>
-                      <button className="px-4 py-2 bg-black text-white rounded-xl font-bold hover:bg-zinc-800 transition-all" onClick={() => handleDelete(property._id)}>Delete</button>
+                    <div className="flex justify-center gap-4">
+                      <button className="text-white/40 hover:text-gold transition-colors" onClick={() => navigate(`/admin/edit-property/${property._id}`)}>EDIT</button>
+                      <button className="text-white/40 hover:text-red-400 transition-colors" onClick={() => handleDelete(property._id)}>DELETE</button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
       )}
     </div>
   );

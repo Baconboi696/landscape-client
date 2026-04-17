@@ -9,6 +9,7 @@ const PropertyList = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [category, setCategory] = useState('all');
   const [type, setType] = useState('all');
   const [search, setSearch] = useState('');
@@ -52,71 +53,73 @@ const PropertyList = () => {
   };
 
   return (
-    <section className="px-6 pb-24 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 border-b border-black/5 pb-10">
+    <section className="px-6 py-32 max-w-7xl mx-auto w-full pt-48">
+      <div className="mb-16 border-b border-white/10 pb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h2 className="text-5xl font-black text-black tracking-tighter uppercase">Collection</h2>
-          <p className="text-black/40 font-bold mt-2 uppercase tracking-widest text-[9px]">Elite selection of modern sanctuaries.</p>
+          <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">Our Portfolio</span>
+          <h2 className="text-5xl md:text-7xl font-extralight text-white tracking-tight">The <span className="font-serif italic text-gold">Collection</span></h2>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold text-black/20 uppercase tracking-[0.3em]">{sorted.length} Units available</span>
+        <div className="text-xs font-light uppercase tracking-[0.2em] text-white/50">
+          {sorted.length} {sorted.length === 1 ? 'Estate' : 'Estates'} Available
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-6 mb-24 p-12 bg-zinc-50 rounded-[3rem] items-end border border-black/5 shadow-sm">
-        <div className="flex-1 min-w-[200px] space-y-3">
-          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Classification</label>
-          <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest cursor-pointer text-[10px] appearance-none shadow-sm">
-            {categories.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+      <div className="bg-[#0a0a0a] p-8 border border-white/5 mb-16 flex flex-col md:flex-row gap-8">
+        <div className="flex-1 space-y-3">
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Classification</label>
+          <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-0 py-3 bg-transparent border-b border-white/20 focus:border-gold outline-none transition-all text-sm font-light text-white uppercase tracking-widest cursor-pointer">
+            {categories.map(c => <option key={c} value={c} className="bg-[#0a0a0a]">{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
           </select>
         </div>
 
-        <div className="flex-1 min-w-[200px] space-y-3">
-          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Type</label>
-          <select value={type} onChange={e => setType(e.target.value)} className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest cursor-pointer text-[10px] appearance-none shadow-sm">
-            {types.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+        <div className="flex-1 space-y-3">
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Type</label>
+          <select value={type} onChange={e => setType(e.target.value)} className="w-full px-0 py-3 bg-transparent border-b border-white/20 focus:border-gold outline-none transition-all text-sm font-light text-white uppercase tracking-widest cursor-pointer">
+            {types.map(t => <option key={t} value={t} className="bg-[#0a0a0a]">{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
           </select>
         </div>
 
-        <div className="flex-[1.5] min-w-[250px] space-y-3">
-          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Search</label>
+        <div className="flex-[1.5] space-y-3">
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Location</label>
           <input
             type="text"
-            placeholder="CITY / STATE / NAME"
+            placeholder="Search Estates..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest placeholder:text-black/10 text-[10px] shadow-sm"
+            className="w-full px-0 py-3 bg-transparent border-b border-white/20 focus:border-gold outline-none transition-all placeholder:text-white/20 text-sm font-light text-white uppercase tracking-widest"
           />
         </div>
 
-        <div className="flex-1 min-w-[200px] space-y-3">
-          <label className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] ml-2">Sequence</label>
-          <select value={sort} onChange={e => setSort(e.target.value)} className="w-full px-6 py-5 bg-white border border-black/5 rounded-2xl focus:border-black outline-none transition-all font-bold uppercase tracking-widest cursor-pointer text-[10px] appearance-none shadow-sm">
-            <option value="default">Newest First</option>
-            <option value="priceLowHigh">Price: Low to High</option>
-            <option value="priceHighLow">Price: High to Low</option>
+        <div className="flex-1 space-y-3">
+          <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Sort</label>
+          <select value={sort} onChange={e => setSort(e.target.value)} className="w-full px-0 py-3 bg-transparent border-b border-white/20 focus:border-gold outline-none transition-all text-sm font-light text-white uppercase tracking-widest cursor-pointer">
+            <option value="default" className="bg-[#0a0a0a]">Newest First</option>
+            <option value="priceLowHigh" className="bg-[#0a0a0a]">Price: Low to High</option>
+            <option value="priceHighLow" className="bg-[#0a0a0a]">Price: High to Low</option>
           </select>
         </div>
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-40 text-black/10">
-          <div className="w-12 h-12 border-2 border-t-black border-black/5 rounded-full animate-spin mb-6" />
-          <p className="text-[9px] font-bold uppercase tracking-[0.5em] animate-pulse">Syncing Portfolio...</p>
+        <div className="flex flex-col items-center justify-center py-32 text-gold">
+          <div className="w-12 h-12 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+          <p className="text-xs font-light uppercase tracking-[0.2em]">Loading Portfolio...</p>
         </div>
       ) : error ? (
-        <div className="text-center py-20 text-black font-black uppercase border border-black/5 rounded-[3rem] p-8">{error}</div>
+        <div className="text-center py-20 text-red-500 border border-red-500/20 bg-red-500/5 font-light uppercase tracking-widest">{error}</div>
       ) : sorted.length === 0 ? (
-        <div className="text-center py-40 text-black/10 font-black uppercase tracking-[0.5em]">Zero matches found.</div>
+        <div className="text-center py-32 text-white/50 text-lg font-light tracking-widest">No estates match your criteria.</div>
       ) : (
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
         >
           {sorted.map(property => (
-            <PropertyCard key={property._id || property.id} property={property} />
+            <motion.div key={property._id || property.id} variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0 } }}>
+              <PropertyCard property={property} />
+            </motion.div>
           ))}
         </motion.div>
       )}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useNavigate, useLocation, BrowserRouter as Router } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -8,13 +8,14 @@ import Footer from './components/Footer';
 import PropertyList from './components/PropertyList';
 import Login from './admin/Login';
 import AdminApp from './admin/AdminApp';
+import ProtectedRoute from './admin/ProtectedRoute';
 
 const PageTransition = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.8, ease: "easeInOut" }}
   >
     {children}
   </motion.div>
@@ -29,7 +30,6 @@ function HomePage() {
     fetch('/api/properties')
       .then(res => res.json())
       .then(data => {
-        // Show the 3 most recent properties as featured
         setFeatured(Array.isArray(data) ? data.slice(0, 3) : []);
       })
       .catch(() => setFeatured([]))
@@ -39,51 +39,82 @@ function HomePage() {
   return (
     <>
       <HeroSection />
-      <section className="px-8 pb-32 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 border-b border-black/5 pb-10">
-          <div>
-            <h2 className="text-5xl font-black text-black tracking-tighter uppercase">Featured</h2>
-            <p className="text-black/40 font-bold mt-2 uppercase tracking-widest text-[10px]">Hand-picked elite sanctuaries from our collection.</p>
-          </div>
+
+      {/* Cinematic Stats Section */}
+      <section className="py-32 bg-[#0a0a0a] border-y border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 text-center relative z-10">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.1 }}>
+            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Curated </h3>
+            <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Handpicked Homes</p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.3 }}>
+            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Verified </h3>
+            <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Trusted Listing </p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }}>
+            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Seemless</h3>
+            <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Effortless search</p>
+          </motion.div>
         </div>
+      </section>
+
+      <section className="px-6 py-32 max-w-7xl mx-auto w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1 }}
+          className="text-center mb-24"
+        >
+          <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">The Collection</span>
+          <h2 className="text-4xl md:text-6xl font-extralight text-white mb-6 tracking-tight">Curated <span className="font-serif italic text-gold">Masterpieces</span></h2>
+          <div className="w-12 h-[1px] bg-gold mx-auto" />
+        </motion.div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-black/10">
-            <div className="w-10 h-10 border-2 border-t-black border-black/5 rounded-full animate-spin mb-4" />
-            <p className="text-[9px] font-bold uppercase tracking-[0.5em] animate-pulse">Loading...</p>
+          <div className="flex flex-col items-center justify-center py-20 text-gold">
+            <div className="w-12 h-12 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+            <p className="text-xs font-light uppercase tracking-[0.2em]">Curating Properties...</p>
           </div>
         ) : featured.length === 0 ? (
-          <div className="text-center py-20 text-black/10 font-black uppercase tracking-[0.3em] text-sm">
-            No properties listed yet.
+          <div className="text-center py-20 text-white/50 text-lg font-light tracking-wide">
+            Portfolio currently unavailable.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {featured.map(property => (
               <PropertyCard key={property._id || property.id} property={property} />
             ))}
           </div>
         )}
 
-        <div className="flex justify-center mt-20">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="flex justify-center mt-24"
+        >
           <button
-            className="px-16 py-6 bg-black text-white font-bold uppercase tracking-[0.4em] hover:bg-zinc-800 transition-all active:scale-95 rounded-2xl shadow-xl shadow-black/10 text-xs"
+            className="group relative px-12 py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.2em] overflow-hidden transition-all hover:border-gold"
             onClick={() => navigate('/properties')}
           >
-            View All Properties
+            <div className="absolute inset-0 w-0 bg-gold transition-all duration-700 ease-out group-hover:w-full z-0" />
+            <span className="relative z-10 group-hover:text-white transition-colors duration-700">View More</span>
           </button>
-        </div>
+        </motion.div>
       </section>
     </>
   );
 }
 
-function App() {
+const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Ctrl + Alt + A to access admin
       if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
         navigate('/admin/login');
       }
@@ -92,9 +123,11 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
 
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col grain-overlay">
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-[#050505] text-white font-sans selection:bg-gold selection:text-black">
+      {!isAdmin && <Navbar />}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
@@ -107,12 +140,21 @@ function App() {
           />
           <Route path="/properties" element={<PageTransition><PropertyList /></PageTransition>} />
           <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
-          <Route path="/admin/*" element={<PageTransition><AdminApp /></PageTransition>} />
+          <Route 
+            path="/admin/*" 
+            element={
+              <PageTransition>
+                <ProtectedRoute>
+                  <AdminApp />
+                </ProtectedRoute>
+              </PageTransition>
+            } 
+          />
         </Routes>
       </AnimatePresence>
-      <Footer />
+      {!isAdmin && <Footer />}
     </div>
   );
-}
+};
 
 export default App;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -31,7 +32,7 @@ const Messages = () => {
   };
 
   const handleDelete = async id => {
-    if (!window.confirm('Delete this message?')) return;
+    if (!window.confirm('Delete this inquiry?')) return;
     await fetch(`/api/admin/inquiries/${id}`, {
       method: 'DELETE',
       credentials: 'include',
@@ -40,56 +41,62 @@ const Messages = () => {
   };
 
   return (
-    <div className="p-10 space-y-10">
-      <div className="border-b border-black/5 pb-10">
-        <h1 className="text-4xl font-black text-black tracking-tighter uppercase">Signals</h1>
-        <p className="text-black/30 font-bold mt-1 uppercase tracking-widest text-[10px]">Direct inquiries from elite clientele.</p>
-      </div>
+    <div className="p-8 md:p-12 space-y-10 max-w-7xl mx-auto">
+      <header className="border-b border-white/10 pb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <h1 className="text-4xl font-extralight text-white tracking-wide">Inquiry Management</h1>
+          <p className="text-white/40 text-xs tracking-[0.2em] uppercase mt-4">Client Communications & Requests</p>
+        </motion.div>
+      </header>
+
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 text-black/20">
-          <div className="w-8 h-8 border-2 border-t-black border-zinc-100 rounded-full animate-spin mb-4" />
-          <p className="text-[10px] font-bold uppercase tracking-widest animate-pulse">Scanning Signals...</p>
+        <div className="flex flex-col items-center justify-center py-32 text-gold">
+          <div className="w-8 h-8 border border-t-gold border-white/10 rounded-full animate-spin mb-4" />
+          <p className="text-xs font-light tracking-[0.2em] uppercase">Syncing Inquiries...</p>
         </div>
       ) : error ? (
-        <div className="text-center py-10 text-black font-bold uppercase border border-black/5 p-8 rounded-3xl">{error}</div>
+        <div className="text-center py-10 text-red-500 font-light tracking-[0.1em] uppercase border border-red-500/20 p-8 bg-red-500/5">{error}</div>
       ) : (
-        <div className="overflow-hidden border border-black/5 bg-white rounded-[2.5rem] shadow-sm">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
+          className="overflow-x-auto border border-white/5 bg-[#0a0a0a]"
+        >
           <table className="min-w-full">
-            <thead className="bg-zinc-50 border-b border-black/5 text-black/30 uppercase text-[8px] font-bold tracking-[0.3em]">
+            <thead className="border-b border-white/10 text-white/30 uppercase text-[10px] font-semibold tracking-[0.2em]">
               <tr>
-                <th className="px-6 py-5 text-left">Identity</th>
-                <th className="px-6 py-5 text-left">Digital Address</th>
-                <th className="px-6 py-5 text-left">Message</th>
-                <th className="px-6 py-5 text-left">Target</th>
-                <th className="px-6 py-5 text-center">Status</th>
-                <th className="px-6 py-5 text-center">Actions</th>
+                <th className="px-8 py-6 text-left">Client Name</th>
+                <th className="px-8 py-6 text-left">Contact Info</th>
+                <th className="px-8 py-6 text-left">Message</th>
+                <th className="px-8 py-6 text-left">Property Ref</th>
+                <th className="px-8 py-6 text-center">Status</th>
+                <th className="px-8 py-6 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-black font-bold uppercase text-[9px] tracking-widest divide-y divide-black/5">
+            <tbody className="text-white font-light text-[11px] tracking-widest divide-y divide-white/5">
               {messages.map(msg => (
-                <tr key={msg._id} className="hover:bg-zinc-50 transition-colors">
+                <tr key={msg._id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-8 py-6">{msg.name}</td>
-                  <td className="px-8 py-6 text-black/40">{msg.email}</td>
-                  <td className="px-8 py-6 max-w-xs truncate text-[8px] lowercase opacity-60">{msg.message}</td>
-                  <td className="px-8 py-6 italic text-black/40">{msg.property?.name}</td>
+                  <td className="px-8 py-6 text-white/40">{msg.email}</td>
+                  <td className="px-8 py-6 max-w-xs truncate opacity-60 normal-case">{msg.message}</td>
+                  <td className="px-8 py-6 text-gold">{msg.property?.name || 'General Inquiry'}</td>
                   <td className="px-8 py-6 text-center">
                     {msg.responded
-                      ? <span className="px-3 py-1 bg-zinc-100 text-black/40 rounded-full">RESOLVED</span>
-                      : <span className="px-3 py-1 bg-black text-white rounded-full">NEW</span>}
+                      ? <span className="px-3 py-1 bg-white/5 border border-white/10 text-white/40 uppercase text-[9px]">Closed</span>
+                      : <span className="px-3 py-1 bg-gold/10 border border-gold/30 text-gold uppercase text-[9px]">New</span>}
                   </td>
                   <td className="px-8 py-6">
-                    <div className="flex justify-center gap-3">
+                    <div className="flex justify-center gap-4">
                       {!msg.responded && (
-                        <button className="px-4 py-2 border border-black/10 rounded-xl font-bold hover:bg-black hover:text-white transition-all" onClick={() => markResponded(msg._id)}>Resolve</button>
+                        <button className="text-gold/60 hover:text-gold transition-colors" onClick={() => markResponded(msg._id)}>RESOLVE</button>
                       )}
-                      <button className="px-4 py-2 bg-black text-white rounded-xl font-bold hover:bg-zinc-800 transition-all" onClick={() => handleDelete(msg._id)}>Purge</button>
+                      <button className="text-white/40 hover:text-red-400 transition-colors" onClick={() => handleDelete(msg._id)}>DELETE</button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
       )}
     </div>
   );
