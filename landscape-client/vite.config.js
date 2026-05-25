@@ -10,7 +10,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://landscape-client.onrender.com',
         changeOrigin: true,
       }
     }
