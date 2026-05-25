@@ -37,13 +37,21 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
   const token = jwt.sign({ id: admin._id, email: admin.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
-  res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+  res.cookie('token', token, { 
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production', 
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+  });
   res.json({ success: true });
 });
 
 // POST /api/admin/logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', { 
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production', 
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' 
+  });
   res.json({ success: true });
 });
 
