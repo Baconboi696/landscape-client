@@ -1,4 +1,8 @@
-require('dotenv').config({ path: './config/.env' });
+const path = require('path');
+require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, 'config', '.env') });
+
 const connectDB = require('./config/db');
 const Admin = require('./models/Admin');
 const readline = require('readline');
