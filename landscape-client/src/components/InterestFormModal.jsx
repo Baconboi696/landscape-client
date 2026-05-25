@@ -25,25 +25,25 @@ const InterestFormModal = ({ property, onClose, onSubmit, submitting, success, e
         </button>
 
         <div className="mb-10">
-          <h2 className="text-4xl font-black text-black uppercase tracking-tighter mb-2">Inquiry</h2>
+          <h2 className="text-4xl font-black text-black uppercase tracking-tighter mb-2">Enquiry</h2>
           <p className="text-black/30 text-[10px] font-bold uppercase tracking-widest">Connect with our concierge regarding {property.name}.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="text-[10px] font-black text-black/30 uppercase tracking-[0.2em] ml-2">Identity</label>
-            <input name="name" type="text" required placeholder="FULL NAME" value={form.name} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs" />
+            <input name="name" type="text" required placeholder="FULL NAME" value={form.name} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs text-black" />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black text-black/30 uppercase tracking-[0.2em] ml-2">Communication</label>
-            <input name="email" type="email" required placeholder="EMAIL ADDRESS" value={form.email} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs" />
+            <input name="email" type="email" required placeholder="EMAIL ADDRESS" value={form.email} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs text-black" />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black text-black/30 uppercase tracking-[0.2em] ml-2">Contact</label>
-            <input name="phone" type="tel" required placeholder="PHONE" value={form.phone} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs" />
+            <input name="phone" type="tel" required placeholder="PHONE" value={form.phone} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs text-black" />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black text-black/30 uppercase tracking-[0.2em] ml-2">Narrative</label>
-            <textarea name="message" required placeholder="YOUR MESSAGE" value={form.message} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs min-h-[120px]" />
+            <textarea name="message" required placeholder="YOUR MESSAGE" value={form.message} onChange={handleChange} className="w-full px-6 py-4 bg-zinc-50 border border-black/5 rounded-2xl focus:bg-white focus:border-black outline-none transition-all font-bold uppercase tracking-widest text-xs text-black min-h-[120px]" />
           </div>
           <button
             type="submit"
