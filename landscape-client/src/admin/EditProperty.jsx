@@ -16,15 +16,28 @@ const EditProperty = () => {
     type: 'sale',
     category: 'bungalow',
     amenities: '',
+    existingImages: [],
     images: [],
     videos: [],
   });
+
+  const [removedImages, setRemovedImages] = useState([]);
+  const [newImagePreviews, setNewImagePreviews] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    const objectUrls = form.images.map(file => URL.createObjectURL(file));
+    setNewImagePreviews(objectUrls);
+
+    return () => {
+      objectUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [form.images]);
 
   useEffect(() => {
     if (!id) {
@@ -50,9 +63,11 @@ const EditProperty = () => {
           type: data.type || 'sale',
           category: data.category || 'bungalow',
           amenities: Array.isArray(data.amenities) ? data.amenities.join(', ') : data.amenities || '',
+          existingImages: data.images || [],
           images: [],
           videos: [],
         });
+        setRemovedImages([]);
       } catch (err) {
         setNotFound(true);
       } finally {
@@ -67,7 +82,26 @@ const EditProperty = () => {
   };
 
   const handleImageChange = e => {
-    setForm({ ...form, images: Array.from(e.target.files) });
+    const files = Array.from(e.target.files);
+    setForm(prev => ({ ...prev, images: [...prev.images, ...files] }));
+    e.target.value = null; // allow selecting the same file again
+  };
+
+  const handleRemoveExistingImage = imgUrl => {
+    if (window.confirm('Are you sure you want to remove this image? It will be deleted permanently when you save.')) {
+      setForm(prev => ({
+        ...prev,
+        existingImages: prev.existingImages.filter(url => url !== imgUrl),
+      }));
+      setRemovedImages(prev => [...prev, imgUrl]);
+    }
+  };
+
+  const handleRemoveNewImage = index => {
+    setForm(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
 
   const handleVideoChange = e => {
@@ -90,6 +124,7 @@ const EditProperty = () => {
       formData.append('type', form.type);
       formData.append('category', form.category);
       formData.append('amenities', form.amenities);
+      formData.append('removedImages', JSON.stringify(removedImages));
 
       for (const file of form.images) {
         formData.append('images', file);
@@ -238,17 +273,60 @@ const EditProperty = () => {
         </div>
 
         {/* Images */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em] flex justify-between">
-            <span>Update Photography</span>
-            <span className="text-white/20 font-light lowercase tracking-wider">(Leave blank to keep existing)</span>
+            <span>Property Images</span>
+            <span className="text-white/20 font-light lowercase tracking-wider">(Current & New)</span>
           </label>
+          
+          {/* Existing Images Gallery */}
+          {form.existingImages.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+              {form.existingImages.map((img, index) => (
+                <div key={index} className="relative group overflow-hidden rounded border border-white/10 aspect-[4/3]">
+                  <img src={img} alt={`Existing Property ${index}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveExistingImage(img)}
+                      className="px-3 py-1.5 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white text-[10px] uppercase tracking-widest rounded transition-colors"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* New Images Preview */}
+          {newImagePreviews.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+              {newImagePreviews.map((preview, index) => (
+                <div key={index} className="relative group overflow-hidden rounded border border-gold/30 aspect-[4/3]">
+                  <div className="absolute top-2 left-2 z-10 bg-gold text-[#0a0a0a] text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">New</div>
+                  <img src={preview} alt={`New Property ${index}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveNewImage(index)}
+                      className="px-3 py-1.5 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white text-[10px] uppercase tracking-widest rounded transition-colors"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upload Area */}
           <div className="relative group">
             <input name="images" type="file" multiple accept="image/*" onChange={handleImageChange}
               className="w-full px-6 py-8 bg-transparent border border-white/10 border-dashed hover:border-gold hover:bg-gold/5 transition-all text-white/40 cursor-pointer text-xs uppercase tracking-widest file:hidden"
               title="Click to select images" />
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-white/40 tracking-[0.1em] uppercase group-hover:text-gold transition-colors">
-              {form.images.length > 0 ? `${form.images.length} New Media Files Selected` : 'Click to Upload Replacement Images'}
+              Click or Drag to Upload New Images
             </div>
           </div>
         </div>

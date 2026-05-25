@@ -65,7 +65,7 @@ router.post('/interest', async (req, res) => {
                   <!-- Header -->
                   <tr>
                     <td style="background:#111111;padding:32px 40px;">
-                      <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">Landscape Properties</p>
+                      <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">ShivshaktiProperties</p>
                       <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">New Property Enquiry</h1>
                     </td>
                   </tr>
@@ -137,7 +137,7 @@ router.post('/interest', async (req, res) => {
                   <!-- Footer -->
                   <tr>
                     <td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;">
-                      <p style="margin:0;font-size:10px;color:#bbb;text-align:center;letter-spacing:0.1em;">Landscape Properties · Admin Notification · Do not reply directly to this email</p>
+                      <p style="margin:0;font-size:10px;color:#bbb;text-align:center;letter-spacing:0.1em;">ShivshaktiProperties · Admin Notification · Do not reply directly to this email</p>
                     </td>
                   </tr>
 
@@ -172,7 +172,7 @@ router.post('/interest', async (req, res) => {
                     <!-- Header -->
                     <tr>
                       <td style="background:#111111;padding:32px 40px;">
-                        <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">Landscape Properties</p>
+                        <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">ShivshaktiProperties</p>
                         <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">Enquiry Received</h1>
                       </td>
                     </tr>
@@ -218,7 +218,7 @@ router.post('/interest', async (req, res) => {
                       <td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;">
                         <p style="margin:0;font-size:11px;color:#999;line-height:1.6;">
                           If you have additional questions, simply reply to this email.<br/>
-                          <span style="color:#bbb;font-size:10px;">Landscape Properties · This is an automated confirmation</span>
+                          <span style="color:#bbb;font-size:10px;">ShivshaktiProperties · This is an automated confirmation</span>
                         </p>
                       </td>
                     </tr>

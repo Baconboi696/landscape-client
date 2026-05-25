@@ -12,7 +12,7 @@ const Footer = () => (
             </svg>
           </div>
           <span className="text-2xl font-extralight text-white tracking-[0.2em] uppercase">
-            Landscape
+            ShivshaktiProperties
           </span>
         </div>
         <p className="text-sm leading-relaxed max-w-sm text-white/50 font-light tracking-wide">
@@ -43,7 +43,7 @@ const Footer = () => (
     </div>
 
     <div className="max-w-7xl mx-auto pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-white/30 font-light tracking-[0.2em] uppercase">
-      <p>&copy; {new Date().getFullYear()} Landscape Corporation. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} ShivshaktiProperties. All rights reserved.</p>
       <div className="flex gap-10">
         <a href="/admin/login" className="hover:text-gold transition-colors">Agent Portal</a>
         <a href="#" className="hover:text-gold transition-colors">Privacy</a>

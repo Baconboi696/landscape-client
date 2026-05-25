@@ -132,6 +132,36 @@ router.put('/properties/:id', auth, upload.fields([{ name: 'images' }, { name: '
     let imageUrls = existing.images || [];
     let videoUrls = existing.videos || [];
 
+    const removedImages = req.body.removedImages ? JSON.parse(req.body.removedImages) : [];
+
+    if (removedImages.length > 0) {
+      for (const url of removedImages) {
+        try {
+          const urlObj = new URL(url);
+          const pathParts = urlObj.pathname.split('/');
+          const uploadIndex = pathParts.findIndex(p => p === 'upload');
+          if (uploadIndex !== -1 && pathParts.length > uploadIndex + 2) {
+            // Check if the next part is a version number (v followed by digits)
+            // Sometimes there is no version number, so we need to be careful
+            let startIndex = uploadIndex + 1;
+            if (pathParts[startIndex].match(/^v\d+$/)) {
+              startIndex++;
+            }
+            const relevantParts = pathParts.slice(startIndex);
+            const fullPath = relevantParts.join('/');
+            const publicId = fullPath.substring(0, fullPath.lastIndexOf('.'));
+            
+            if (publicId) {
+              await cloudinary.uploader.destroy(publicId);
+            }
+          }
+        } catch (err) {
+          console.error('Failed to delete image from Cloudinary:', err);
+        }
+      }
+      imageUrls = imageUrls.filter(url => !removedImages.includes(url));
+    }
+
     if (req.files?.images?.length > 0) {
       for (const file of req.files.images) {
         const result = await uploadToCloudinary(file.buffer, { folder: 'properties/images', resource_type: 'image' });

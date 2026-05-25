@@ -27,7 +27,7 @@ const Navbar = () => {
             </svg>
           </div>
           <span className="text-2xl font-extralight text-white tracking-[0.2em] uppercase group-hover:text-gold transition-colors duration-500">
-            Landscape
+            ShivshaktiProperties
           </span>
         </div>
 
