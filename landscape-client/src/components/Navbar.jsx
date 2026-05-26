@@ -37,7 +37,7 @@ const Navbar = () => {
               <path d="M5 21V7L12 3L19 7V21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <span className="text-sm font-extralight text-white tracking-[0.1em] uppercase">SSP</span>
+          <span className="text-sm font-extralight text-white tracking-[0.1em] uppercase"></span>
           <span className="hidden md:inline-block text-2xl font-extralight text-white tracking-[0.2em] uppercase">shivshaktiproperty</span>
         </div>
 

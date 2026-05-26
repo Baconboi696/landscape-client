@@ -23,7 +23,7 @@ const ContactPage = () => {
     setSuccess(false);
 
     try {
-      const res = await fetch('/api/properties/interest', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form), // No propertyId, signifying a general inquiry
