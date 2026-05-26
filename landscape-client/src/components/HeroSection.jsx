@@ -93,21 +93,21 @@ const HeroSection = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             className="flex flex-col items-center pointer-events-auto"
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extralight text-white tracking-tight leading-[1.1] mb-8 drop-shadow-2xl">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extralight text-white tracking-tight leading-[1.1] mb-8 drop-shadow-2xl">
               <span className="block mb-2">{slide.line1}</span>
               <span className="block font-serif italic text-gold">{slide.line2}</span>
-              <span className="block uppercase tracking-[0.3em] text-4xl md:text-5xl lg:text-6xl mt-6">{slide.line3}</span>
+              <span className="block uppercase tracking-[0.2em] sm:tracking-[0.3em] text-xl sm:text-4xl md:text-5xl lg:text-6xl mt-6">{slide.line3}</span>
             </h1>
 
             <div className="w-16 h-[1px] bg-gold/50 mx-auto mb-8" />
             
-            <p className="text-white/70 font-light text-xs md:text-sm tracking-[0.2em] leading-loose max-w-2xl uppercase mb-10 drop-shadow-lg">
+            <p className="text-white/70 font-light text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.2em] leading-loose max-w-2xl uppercase mb-10 drop-shadow-lg">
               {slide.subtext}
             </p>
 
             <button
               onClick={() => navigate(slide.link)}
-              className="group relative px-12 py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.2em] overflow-hidden transition-all hover:border-gold"
+              className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.15em] sm:tracking-[0.2em] text-xs overflow-hidden transition-all hover:border-gold"
             >
               <div className="absolute inset-0 w-0 bg-gold transition-all duration-700 ease-out group-hover:w-full z-0 opacity-10" />
               <span className="relative z-10 group-hover:text-gold transition-colors duration-700">{slide.cta}</span>

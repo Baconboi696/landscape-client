@@ -13,6 +13,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
+
   return (
     <nav className={`fixed w-full top-0 z-50 transition-all duration-700 ${scrolled ? 'bg-[#050505]/90 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-8'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -27,7 +38,7 @@ const Navbar = () => {
             </svg>
           </div>
           <span className="text-2xl font-extralight text-white tracking-[0.2em] uppercase group-hover:text-gold transition-colors duration-500">
-            ShivshaktiProperties
+            shivshaktiproperty
           </span>
         </div>
 
@@ -48,9 +59,9 @@ const Navbar = () => {
           </button>
           <button
             className="px-8 py-3 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-gold transition-all duration-500"
-            onClick={() => navigate('/properties')}
+            onClick={() => navigate('/contact')}
           >
-            Search
+            Contact Us
           </button>
         </div>
 
@@ -73,7 +84,7 @@ const Navbar = () => {
           >
             <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/'); setMenuOpen(false); }}>Home</button>
             <button className="text-2xl font-extralight text-white tracking-[0.2em] uppercase hover:text-gold transition-colors" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Properties</button>
-            <button className="mt-8 px-10 py-4 border border-gold text-gold font-light tracking-[0.2em] uppercase hover:bg-gold hover:text-black transition-all" onClick={() => { navigate('/properties'); setMenuOpen(false); }}>Search</button>
+            <button className="mt-8 px-10 py-4 border border-gold text-gold font-light tracking-[0.2em] uppercase hover:bg-gold hover:text-black transition-all" onClick={() => { navigate('/contact'); setMenuOpen(false); }}>Contact Us</button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -18,9 +18,9 @@ const InterestFormModal = ({ property, onClose, onSubmit, submitting, success, e
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white w-full max-w-lg rounded-[3rem] p-12 border border-black/5 shadow-2xl relative"
+        className="bg-white w-full max-w-lg rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-12 border border-black/5 shadow-2xl relative"
       >
-        <button onClick={onClose} className="absolute top-8 right-8 p-4 bg-zinc-50 rounded-full border border-black/5 hover:bg-black hover:text-white transition-all">
+        <button onClick={onClose} className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 sm:p-4 bg-zinc-50 rounded-full border border-black/5 hover:bg-black hover:text-white transition-all animate-none">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 

@@ -6,7 +6,7 @@ const FarmlandsSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative w-full h-[90vh] min-h-[700px] flex items-center justify-center overflow-hidden border-y border-white/5">
+    <section className="relative w-full h-[90vh] min-h-[500px] sm:min-h-[700px] flex items-center justify-center overflow-hidden border-y border-white/5">
       {/* Background with Ken Burns Effect */}
       <motion.div
         className="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2689&auto=format&fit=crop')] bg-cover bg-center"
@@ -30,10 +30,10 @@ const FarmlandsSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="space-y-4 mb-10"
         >
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-extralight text-white tracking-tight leading-[1.1]">
+          <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extralight text-white tracking-tight leading-[1.1]">
             <span className="block mb-2">Timeless Landscapes</span>
             <span className="block font-serif italic text-gold">Rooted in</span>
-            <span className="block uppercase tracking-[0.3em] text-4xl md:text-5xl lg:text-6xl mt-8">Nature</span>
+            <span className="block uppercase tracking-[0.2em] sm:tracking-[0.3em] text-xl sm:text-4xl md:text-5xl lg:text-6xl mt-8">Nature</span>
           </h2>
         </motion.div>
 
@@ -45,13 +45,13 @@ const FarmlandsSection = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="w-16 h-[1px] bg-gold/50 mx-auto mb-10" />
-          <p className="text-white/60 font-light text-xs md:text-sm tracking-[0.2em] leading-loose mb-12 uppercase">
+          <p className="text-white/60 font-light text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.2em] leading-loose mb-12 uppercase">
             Experience expansive farmlands where tranquility, open skies, and authentic living come together in perfect harmony.
           </p>
           
           <button
             onClick={() => navigate('/properties?category=farmland')}
-            className="group relative px-12 py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.2em] overflow-hidden transition-all hover:border-gold"
+            className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.15em] sm:tracking-[0.2em] text-xs overflow-hidden transition-all hover:border-gold"
           >
             <div className="absolute inset-0 w-0 bg-gold transition-all duration-700 ease-out group-hover:w-full z-0 opacity-10" />
             <span className="relative z-10 group-hover:text-gold transition-colors duration-700">Explore Farmlands</span>

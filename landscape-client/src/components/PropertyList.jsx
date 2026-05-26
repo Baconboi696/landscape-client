@@ -53,18 +53,18 @@ const PropertyList = () => {
   };
 
   return (
-    <section className="px-6 py-32 max-w-7xl mx-auto w-full pt-48">
-      <div className="mb-16 border-b border-white/10 pb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+    <section className="px-6 py-16 md:py-32 max-w-7xl mx-auto w-full pt-32 md:pt-48">
+      <div className="mb-12 md:mb-16 border-b border-white/10 pb-8 md:pb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
           <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">Our Properties</span>
-          <h2 className="text-5xl md:text-7xl font-extralight text-white tracking-tight">The <span className="font-serif italic text-gold">Collection</span></h2>
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-extralight text-white tracking-tight">The <span className="font-serif italic text-gold">Collection</span></h2>
         </div>
         <div className="text-xs font-light uppercase tracking-[0.2em] text-white/50">
           {sorted.length} {sorted.length === 1 ? 'Estate' : 'Estates'} Available
         </div>
       </div>
 
-      <div className="bg-[#0a0a0a] p-8 border border-white/5 mb-16 flex flex-col md:flex-row gap-8">
+      <div className="bg-[#0a0a0a] p-6 md:p-8 border border-white/5 mb-12 md:mb-16 flex flex-col md:flex-row gap-6 md:gap-8">
         <div className="flex-1 space-y-3">
           <label className="text-[10px] font-semibold text-white/40 uppercase tracking-[0.2em]">Classification</label>
           <select value={category} onChange={e => setCategory(e.target.value)} className="w-full px-0 py-3 bg-transparent border-b border-white/20 focus:border-gold outline-none transition-all text-sm font-light text-white uppercase tracking-widest cursor-pointer">

@@ -32,18 +32,21 @@ router.post('/interest', async (req, res) => {
   const { name, email, phone, message, propertyId } = req.body;
 
   try {
-    const property = await Property.findById(propertyId);
-    if (!property) return res.status(404).json({ error: 'Property not found' });
+    let property = null;
+    if (propertyId) {
+      property = await Property.findById(propertyId);
+      if (!property) return res.status(404).json({ error: 'Property not found' });
+    }
 
     // Save inquiry to database first (always, even if email fails)
-    const inquiry = new Inquiry({ name, email, phone, message, property: propertyId });
+    const inquiry = new Inquiry({ name, email, phone, message, property: propertyId || null });
     await inquiry.save();
 
     // Send email via Resend if configured
     if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_your_api_key_here') {
-      const locationDisplay = property.city && property.state
+      const locationDisplay = property && property.city && property.state
         ? `${property.city}, ${property.state}`
-        : property.location || 'N/A';
+        : property ? (property.location || 'N/A') : 'General Enquiry';
 
       const isTestMode = (process.env.EMAIL_FROM || '').includes('resend.dev');
 
@@ -52,7 +55,9 @@ router.post('/interest', async (req, res) => {
         from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
         to: [process.env.ADMIN_EMAIL],
         replyTo: email,
-        subject: `New Enquiry: ${property.name} — ${locationDisplay}`,
+        subject: property
+          ? `New Enquiry: ${property.name} — ${locationDisplay}`
+          : `General Enquiry from ${name}`,
         html: `
           <!DOCTYPE html>
           <html>
@@ -65,12 +70,13 @@ router.post('/interest', async (req, res) => {
                   <!-- Header -->
                   <tr>
                     <td style="background:#111111;padding:32px 40px;">
-                      <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">ShivshaktiProperties</p>
-                      <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">New Property Enquiry</h1>
+                      <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">shivshaktiproperty</p>
+                      <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">${property ? 'New Property Enquiry' : 'General Enquiry'}</h1>
                     </td>
                   </tr>
 
                   <!-- Property Info -->
+                  ${property ? `
                   <tr>
                     <td style="padding:32px 40px 0;">
                       <p style="margin:0 0 16px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.25em;border-bottom:1px solid #f0f0f0;padding-bottom:12px;">Property of Interest</p>
@@ -94,6 +100,7 @@ router.post('/interest', async (req, res) => {
                       </table>
                     </td>
                   </tr>
+                  ` : ''}
 
                   <!-- Enquirer Info -->
                   <tr>
@@ -127,7 +134,7 @@ router.post('/interest', async (req, res) => {
                   <!-- Reply CTA -->
                   <tr>
                     <td style="padding:0 40px 32px;">
-                      <a href="mailto:${email}?subject=Re: Enquiry about ${encodeURIComponent(property.name)}"
+                      <a href="mailto:${email}?subject=Re: ${property ? `Enquiry about ${encodeURIComponent(property.name)}` : 'Enquiry Response'}"
                          style="display:inline-block;background:#111;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;">
                         Reply to ${name}
                       </a>
@@ -137,7 +144,7 @@ router.post('/interest', async (req, res) => {
                   <!-- Footer -->
                   <tr>
                     <td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;">
-                      <p style="margin:0;font-size:10px;color:#bbb;text-align:center;letter-spacing:0.1em;">ShivshaktiProperties · Admin Notification · Do not reply directly to this email</p>
+                      <p style="margin:0;font-size:10px;color:#bbb;text-align:center;letter-spacing:0.1em;">shivshaktiproperty · Admin Notification · Do not reply directly to this email</p>
                     </td>
                   </tr>
 
@@ -159,7 +166,9 @@ router.post('/interest', async (req, res) => {
           from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
           to: [email],
           replyTo: process.env.ADMIN_EMAIL,
-          subject: `We received your enquiry about ${property.name}`,
+          subject: property
+            ? `We received your enquiry about ${property.name}`
+            : `We received your enquiry — Shiv Shakti Property`,
           html: `
             <!DOCTYPE html>
             <html>
@@ -172,7 +181,7 @@ router.post('/interest', async (req, res) => {
                     <!-- Header -->
                     <tr>
                       <td style="background:#111111;padding:32px 40px;">
-                        <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">ShivshaktiProperties</p>
+                        <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;opacity:0.5;">shivshaktiproperty</p>
                         <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">Enquiry Received</h1>
                       </td>
                     </tr>
@@ -182,20 +191,21 @@ router.post('/interest', async (req, res) => {
                       <td style="padding:36px 40px 20px;">
                         <p style="margin:0 0 12px;font-size:16px;color:#111;font-weight:700;">Hi ${name},</p>
                         <p style="margin:0;font-size:14px;color:#555;line-height:1.7;">
-                          Thank you for your enquiry. We have received your message regarding
-                          <strong style="color:#111;">${property.name}</strong> and our team will get back to you shortly.
+                          Thank you for your enquiry. We have received your message
+                          ${property ? `regarding <strong style="color:#111;">${property.name}</strong>` : ''} and our team will get back to you shortly.
                         </p>
                       </td>
                     </tr>
 
                     <!-- Property summary -->
+                    ${property ? `
                     <tr>
                       <td style="padding:0 40px 32px;">
                         <div style="background:#f9f9f9;border-radius:12px;padding:24px;border:1px solid #eee;">
                           <p style="margin:0 0 16px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.25em;">Property You Enquired About</p>
                           <p style="margin:0 0 6px;font-size:17px;font-weight:900;color:#111;letter-spacing:-0.3px;">${property.name}</p>
                           <p style="margin:0 0 4px;font-size:12px;color:#888;">
-                            📍 ${property.city && property.state ? `${property.city}, ${property.state}` : property.location || ''}
+                            📍 ${locationDisplay}
                           </p>
                           <p style="margin:8px 0 0;">
                             <span style="display:inline-block;background:#111;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:20px;">${property.type}</span>
@@ -204,6 +214,7 @@ router.post('/interest', async (req, res) => {
                         </div>
                       </td>
                     </tr>
+                    ` : ''}
 
                     <!-- Your message recap -->
                     <tr>
@@ -218,7 +229,7 @@ router.post('/interest', async (req, res) => {
                       <td style="background:#f9f9f9;padding:20px 40px;border-top:1px solid #f0f0f0;">
                         <p style="margin:0;font-size:11px;color:#999;line-height:1.6;">
                           If you have additional questions, simply reply to this email.<br/>
-                          <span style="color:#bbb;font-size:10px;">ShivshaktiProperties · This is an automated confirmation</span>
+                          <span style="color:#bbb;font-size:10px;">shivshaktiproperty · This is an automated confirmation</span>
                         </p>
                       </td>
                     </tr>
@@ -241,7 +252,6 @@ router.post('/interest', async (req, res) => {
     } else {
       console.warn('RESEND_API_KEY not configured — inquiry saved but emails not sent.');
     }
-
 
     res.json({ success: true });
   } catch (err) {

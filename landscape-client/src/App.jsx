@@ -9,6 +9,7 @@ import PropertyList from './components/PropertyList';
 import Login from './admin/Login';
 import AdminApp from './admin/AdminApp';
 import ProtectedRoute from './admin/ProtectedRoute';
+import ContactPage from './components/ContactPage';
 
 const PageTransition = ({ children }) => (
   <motion.div
@@ -41,34 +42,34 @@ function HomePage() {
       <HeroSection />
 
       {/* Cinematic Stats Section */}
-      <section className="py-32 bg-[#0a0a0a] border-y border-white/5 relative overflow-hidden">
+      <section className="py-16 md:py-32 bg-[#0a0a0a] border-y border-white/5 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 text-center relative z-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.1 }}>
-            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Curated </h3>
+            <h3 className="text-4xl sm:text-5xl md:text-8xl font-extralight text-gold mb-4">Curated </h3>
             <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Handpicked Homes</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.3 }}>
-            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Verified </h3>
+            <h3 className="text-4xl sm:text-5xl md:text-8xl font-extralight text-gold mb-4">Verified </h3>
             <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Trusted Listing </p>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }}>
-            <h3 className="text-6xl md:text-8xl font-extralight text-gold mb-4">Seemless</h3>
+            <h3 className="text-4xl sm:text-5xl md:text-8xl font-extralight text-gold mb-4">Seamless</h3>
             <p className="text-xs text-white/50 uppercase tracking-[0.3em]">Effortless search</p>
           </motion.div>
         </div>
       </section>
 
-      <section className="px-6 py-32 max-w-7xl mx-auto w-full">
+      <section className="px-6 py-16 md:py-32 max-w-7xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1 }}
-          className="text-center mb-24"
+          className="text-center mb-12 md:mb-24"
         >
           <span className="text-gold text-xs font-semibold uppercase tracking-[0.3em] mb-4 block">The Collection</span>
-          <h2 className="text-4xl md:text-6xl font-extralight text-white mb-6 tracking-tight">Curated <span className="font-serif italic text-gold">Masterpieces</span></h2>
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-extralight text-white mb-6 tracking-tight">Curated <span className="font-serif italic text-gold">Masterpieces</span></h2>
           <div className="w-12 h-[1px] bg-gold mx-auto" />
         </motion.div>
 
@@ -94,7 +95,7 @@ function HomePage() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="flex justify-center mt-24"
+          className="flex justify-center mt-12 md:mt-24"
         >
           <button
             className="group relative px-12 py-5 bg-transparent border border-white/20 text-white font-light uppercase tracking-[0.2em] overflow-hidden transition-all hover:border-gold"
@@ -139,6 +140,7 @@ const App = () => {
             }
           />
           <Route path="/properties" element={<PageTransition><PropertyList /></PageTransition>} />
+          <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
           <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
           <Route
             path="/admin/*"

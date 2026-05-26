@@ -61,13 +61,13 @@ const PropertyDetailsModal = ({ property, onClose }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-          className="bg-white w-full max-w-6xl max-h-[92vh] overflow-y-auto rounded-[3rem] border border-black/5 shadow-2xl relative"
+          className="bg-white w-full max-w-6xl max-h-[92vh] overflow-y-auto rounded-[2rem] sm:rounded-[3rem] border border-black/5 shadow-2xl relative"
           onClick={e => e.stopPropagation()}
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-8 right-8 z-20 p-4 bg-white/80 backdrop-blur-md rounded-full border border-black/5 hover:bg-black hover:text-white transition-all shadow-md"
+            className="absolute top-4 right-4 lg:top-8 lg:right-8 z-20 p-3 lg:p-4 bg-white/80 backdrop-blur-md rounded-full border border-black/5 hover:bg-black hover:text-white transition-all shadow-md"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -76,7 +76,7 @@ const PropertyDetailsModal = ({ property, onClose }) => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* ── Left: Media Panel ── */}
-            <div className="flex flex-col bg-zinc-50 rounded-tl-[3rem] rounded-bl-[3rem] overflow-hidden">
+            <div className="flex flex-col bg-zinc-50 rounded-t-[2rem] sm:rounded-t-[3rem] lg:rounded-l-[3rem] lg:rounded-tr-none lg:rounded-br-none overflow-hidden">
               {/* Main media display */}
               <div className="relative aspect-[4/3] overflow-hidden">
                 {activeTab === 'images' ? (
@@ -162,7 +162,7 @@ const PropertyDetailsModal = ({ property, onClose }) => {
             </div>
 
             {/* ── Right: Details Panel ── */}
-            <div className="p-10 lg:p-12 space-y-8 overflow-y-auto">
+            <div className="p-6 sm:p-10 lg:p-12 space-y-8 overflow-y-auto">
               {/* Header */}
               <div>
                 <div className="flex items-center gap-2 mb-4 flex-wrap">
