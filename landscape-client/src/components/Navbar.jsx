@@ -31,14 +31,13 @@ const Navbar = () => {
           className="flex items-center gap-4 cursor-pointer group"
           onClick={() => navigate('/')}
         >
-          <div className="w-10 h-10 md:w-12 md:h-12 border border-gold/50 rounded-full flex items-center justify-center text-gold group-hover:border-gold transition-all duration-500">
+          {/* <div className="w-10 h-10 md:w-12 md:h-12 border border-gold/50 rounded-full flex items-center justify-center text-gold group-hover:border-gold transition-all duration-500">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M3 21H21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
               <path d="M5 21V7L12 3L19 7V21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </div>
-          <span className="text-sm font-extralight text-white tracking-[0.1em] uppercase"></span>
-          <span className="hidden md:inline-block text-2xl font-extralight text-white tracking-[0.2em] uppercase">shivshaktiproperty</span>
+          </div> */}
+          <span className=" md:inline-block font-extralight text-white tracking-[0.2em] uppercase">shivshaktiproperty</span>
         </div>
 
         <div className="hidden md:flex items-center space-x-12">

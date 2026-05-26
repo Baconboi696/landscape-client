@@ -5,12 +5,12 @@ const Footer = () => (
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 border-b border-white/10 pb-20">
       <div className="md:col-span-2 space-y-8">
         <div className="flex items-center gap-4 cursor-pointer group w-max" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="w-12 h-12 border border-gold rounded-full flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-all duration-500">
+          {/* <div className="w-12 h-12 border border-gold rounded-full flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-all duration-500">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M3 21H21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
               <path d="M5 21V7L12 3L19 7V21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </div>
+          </div> */}
           <span className="text-2xl font-extralight text-white tracking-[0.2em] uppercase">
             shivshaktiproperty
           </span>
