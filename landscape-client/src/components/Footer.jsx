@@ -23,7 +23,7 @@ const Footer = () => (
       <div className="space-y-8">
         <h4 className="text-gold font-light text-xs tracking-[0.3em] uppercase">Company</h4>
         <div className="flex flex-col gap-4 text-xs font-light tracking-[0.1em] text-white/50">
-          <a href="#" className="hover:text-gold transition-colors w-max">About Us</a>
+          <a href="/about" className="hover:text-gold transition-colors w-max">About Us</a>
           <a href="#" className="hover:text-gold transition-colors w-max"></a>
           <a href="#" className="hover:text-gold transition-colors w-max"></a>
         </div>
