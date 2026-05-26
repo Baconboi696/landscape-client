@@ -123,7 +123,7 @@ const ContactPage = () => {
                 <div>
                   <h4 className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em] mb-1">Corporate HQ</h4>
                   <p className="text-sm font-light text-white/80 tracking-wide">
-                    Pune, Maharashtra, India
+                    Pen, Raigad, Maharashtra
                   </p>
                 </div>
               </div>
