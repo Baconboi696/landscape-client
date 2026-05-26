@@ -262,12 +262,12 @@ const ContactPage = () => {
         >
           <div className="px-8 py-6 border-b border-white/5 flex items-center justify-between">
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Office Location Map</h3>
-            <span className="text-[10px] text-gold tracking-widest uppercase">Pune, Maharashtra</span>
+            <span className="text-[10px] text-gold tracking-widest uppercase">Pen , Maharashtra</span>
           </div>
           <div className="relative w-full h-[400px] grayscale contrast-125 opacity-70 hover:grayscale-0 hover:opacity-90 transition-all duration-1000">
             <iframe
               title="office-location-map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121059.04360341774!2d73.79292679234851!3d18.5248706173003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828d43bf9d9ee343!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30227.386826258054!2d73.076199884421!3d18.73461771575927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be80b2a19d56a4f%3A0x2a883f37ce1a5f16!2sPen%2C%20Maharashtra%20402107!5e0!3m2!1sen!2sin!4v1779793858817!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}

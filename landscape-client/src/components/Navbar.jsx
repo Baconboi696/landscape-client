@@ -56,7 +56,13 @@ const Navbar = () => {
             <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full" />
           </button>
           <button
-            className="px-8 py-3 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-gold transition-all duration-500"
+            className="text-xs font-light text-white/70 hover:text-gold transition-colors tracking-[0.15em] uppercase relative group"
+            onClick={() => navigate('/about')}
+          >
+            About Us
+          </button>
+          <button
+            className="px-8 py-3 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-gold transition-all duration-500 ml-2"
             onClick={() => navigate('/contact')}
           >
             Contact Us

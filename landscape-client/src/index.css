@@ -1,53 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-white text-black antialiased selection:bg-black selection:text-white;
+    @apply bg-[#050505] text-white antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
     min-height: 100vh;
   }
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-white;
+    background: #0a0a0a;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-black/10 rounded-full hover:bg-black/30 transition-all;
+    background: rgba(201, 168, 76, 0.25);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 168, 76, 0.5);
+  }
+
+  * {
+    box-sizing: border-box;
   }
 }
 
-.glass-morphism {
-  @apply bg-white/70 backdrop-blur-3xl border border-black/10 shadow-sm rounded-3xl;
+@layer utilities {
+  /* Hide scrollbar but keep scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Gold glass card utility */
+  .gold-glass {
+    background: rgba(201, 168, 76, 0.06);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Dark glass utility for modals */
+  .modal-glass {
+    background: rgba(10, 10, 10, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
-.noir-button-solid {
-  @apply bg-black text-white px-8 py-4 font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95 rounded-full;
-}
+@layer components {
+  /* Gold accent button */
+  .btn-gold {
+    @apply relative overflow-hidden border border-gold/50 text-gold font-light uppercase tracking-[0.25em] text-xs rounded-xl px-8 py-4 transition-all duration-500 hover:border-gold;
+  }
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #c9a84c;
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .btn-gold:hover::after {
+    transform: translateY(0);
+  }
+  .btn-gold span {
+    position: relative;
+    z-index: 10;
+  }
+  .btn-gold:hover span {
+    color: black;
+  }
 
-.noir-button-outline {
-  @apply bg-white text-black border border-black/10 px-8 py-4 font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all active:scale-95 rounded-full;
-}
-
-.text-noir-header {
-  @apply font-black uppercase tracking-tighter text-black leading-[0.9];
-}
-
-/* Texture Overlay */
-.grain-overlay::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.03;
-  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)"/></svg>');
+  /* Subtle grain texture overlay */
+  .grain-overlay::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+  }
 }

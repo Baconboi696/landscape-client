@@ -10,6 +10,7 @@ import Login from './admin/Login';
 import AdminApp from './admin/AdminApp';
 import ProtectedRoute from './admin/ProtectedRoute';
 import ContactPage from './components/ContactPage';
+import AboutUs from './components/AboutUs';
 
 const PageTransition = ({ children }) => (
   <motion.div
@@ -141,6 +142,7 @@ const App = () => {
           />
           <Route path="/properties" element={<PageTransition><PropertyList /></PageTransition>} />
           <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+          <Route path="/about" element={<PageTransition><AboutUs /></PageTransition>} />
           <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
           <Route
             path="/admin/*"
